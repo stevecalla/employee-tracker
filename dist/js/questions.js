@@ -90,7 +90,10 @@ const questionsAddRole = [ // maps to Add Role
     return isNumber(answer);
   },
   filter(answer) {
-    return answer;
+    // answer = parseInt(answer).toLocaleString();
+    // console.log(answer, typeof(answer), answer.toLocaleString());
+    //convert to parseInt in the role class
+    return parseInt(answer);
   },
 },
 {
