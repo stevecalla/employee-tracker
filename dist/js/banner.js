@@ -1,9 +1,9 @@
 const { blue, white } = require('../../lib/util')
 
-const appBanner = `${white}${blue}
+const banner = `${white}${blue}
 oooooooooooo                              oooo                                            
  888       8                               888                                            
- 888          ooo   oo   ooo    oo.ooooo.   888   .ooooo.  oooo    ooo   ooooo     ooooo  
+ 888          ooo   oo   ooo    oo.ooooo.   888   .ooooo.  oooo    ooo  ooooo     ooooo  
  888oooo8     888P"Y88bP"Y88b   888   88b  888  d88   88b   88.  .8   d88   88b d88   88b 
  888          888   888   888   888   888  888  888   888    88..8    888ooo888 888ooo888 
  888       o  888   888   888   888   888  888  888   888     888     888    .o 888    .o 
@@ -24,5 +24,5 @@ o8o        o888o  Y888""8o o888o o888o  Y888""8o  8oooooo.   Y8bod8P  d888b
 // const appBanner = "hello";
 
 module.exports = {
-  appBanner
+  banner
 };

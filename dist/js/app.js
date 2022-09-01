@@ -5,7 +5,7 @@ const {
   getEmployee,
   getUpdateEmployeeRole,
 } = require("./runInquirer");
-const { appBanner } = require("./appBanner");
+const { banner } = require("./banner");
 const { blue } = require("../../lib/util");
 
 //ASK USER WHAT ACTION TO PERFORM
@@ -74,7 +74,7 @@ renderInput = (input, type) => {
   type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.newRole}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
 }
 
-// console.log(appBanner);
+console.log(banner);
 getWhatToDo();
 
 module.exports = {
