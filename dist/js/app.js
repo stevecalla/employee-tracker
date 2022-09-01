@@ -58,8 +58,7 @@ getInfo = async (askQuestions, type) => {
     .then(() => questionPrompts())
 };
 
-console.log(`${appBanner}`);
-// console.log(`\x1b[36;1m${appBanner}`);
+// console.log(appBanner);
 questionPrompts();
 
 module.exports = {
