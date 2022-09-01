@@ -7,7 +7,7 @@ const {
 } = require("./runInquirer");
 const { banner } = require("./banner");
 const { blue } = require("../../lib/util");
-// const consoleTable = require('console.table');
+const consoleTable = require('console.table');
 const { seedData } = require('../db/seedData');
 
 //ASK USER WHAT ACTION TO PERFORM
