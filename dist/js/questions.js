@@ -1,4 +1,4 @@
-const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank } = require("../../lib/util");
+const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../lib/util");
 
 choicesStart = [
   "View All Employees", // todo:returns a table of employees
@@ -43,7 +43,7 @@ const questionsUserChoice = [
     prefix: "\n⠋🟡",
     type: "rawlist",
     name: "userSelection",
-    message: "\u001b[0;1mWhat would you like to do?",
+    message: `${white}What would you like to do?`,
     choices: choicesStart,
     suffix: " 🟡",
   },
@@ -54,7 +54,7 @@ const questionsAddDepartment = [ // maps to Add Department
     prefix: "⠋🟡 1 of 1)",
     type: "input",
     name: "department",
-    message: `\u001b[0;1mEnter the name of the \x1b[36;1mdepartment\u001b[0;1m?`,
+    message: `${white}Enter the name of the ${blue}department${white}?`,
     default: "New Department",
     suffix: " 🟡",
     validate(answer) {
@@ -71,7 +71,7 @@ const questionsAddRole = [ // maps to Add Role
   prefix: "⠋🟡 1 of 3)",
   type: "input",
   name: "role",
-  message: `\u001b[0;1mEnter the \x1b[36;1mrole\u001b[0;1m?`,
+  message: `${white}Enter the ${blue}role${white}?`,
   choices: choicesRoles,
   default: "New Role",
   suffix: " 🟡",
@@ -83,7 +83,7 @@ const questionsAddRole = [ // maps to Add Role
   prefix: "⠋🟡 2 of 3)",
   type: "input",
   name: "salary",
-  message: `\u001b[0;1mEnter the \x1b[36;1msalary\u001b[0;1m of the role (with no commas)?`,
+  message: `${white}Enter the ${blue}salary${white} of the role (with no commas)?`,
   default: "10000",
   suffix: " 🟡",
   validate(answer) {
@@ -100,7 +100,7 @@ const questionsAddRole = [ // maps to Add Role
   prefix: "⠋🟡 3 of 3)",
   type: "rawlist",
   name: "department",
-  message: `\u001b[0;1mEnter the \x1b[36;1mdepartment\u001b[0;1m of the role?`,
+  message: `${white}Enter the ${blue}department${white} of the role?`,
   choices: choicesDepartments,
   // default: "Manager",
   suffix: " 🟡",
@@ -112,7 +112,7 @@ const questionsAddEmployee = [
     prefix: "⠋🟡 1 of 6)",
     type: "input",
     name: "firstName",
-    message: `\u001b[0;1mEnter the \x1b[36;1mfirst\u001b[0;1m name?`,
+    message: `${white}Enter the ${blue}first${white} name?`,
     default: "Steve",
     suffix: " 🟡",
     validate(answer) {
@@ -126,7 +126,7 @@ const questionsAddEmployee = [
     prefix: "⠋🟡 2 of 6)",
     type: "input",
     name: "lastName",
-    message: `\u001b[0;1mEnter the \x1b[36;1mlast\u001b[0;1m name?`,
+    message: `${white}Enter the ${blue}last${white} name?`,
     default: "Calla",
     suffix: " 🟡",
     validate(answer) {
@@ -140,7 +140,7 @@ const questionsAddEmployee = [
     prefix: "⠋🟡 3 of 6)",
     type: "input",
     name: "role",
-    message: `\u001b[0;1mEnter the \x1b[36;1memployee's role\u001b[0;1m?`,
+    message: `${white}Enter the ${blue}employee's role${white}?`,
     default: "Manager",
     suffix: " 🟡",
     validate(answer) {
@@ -154,7 +154,7 @@ const questionsAddEmployee = [
     prefix: "⠋🟡 4 of 6)",
     type: "rawlist",
     name: "employeeManager",
-    message: `\u001b[0;1mEnter the \x1b[36;1memployee's manager\u001b[0;1m?`,
+    message: `${white}Enter the ${blue}employee's manager${white};1m?`,
     choices: choicesEmployees,
     default: "Joanne Smith",
     suffix: " 🟡",
@@ -169,7 +169,7 @@ const questionsAddEmployee = [
     prefix: "⠋🟡 5 of 6)",
     name: "employeeId",
     type: "input",
-    message: `\u001b[0;1mEnter the \x1b[36;1memployee ID\u001b[0;1m?`,
+    message: `\u001b[0;1mEnter the ${blue}employee ID${white}?`,
     default: "1",
     validate(answer) {
       return isNumber(answer);
@@ -182,7 +182,7 @@ const questionsAddEmployee = [
     prefix: "⠋🟡 6 of 6)",
     name: "emailAddress",
     type: "input",
-    message: `\u001b[0;1mEnter the \x1b[36;1memail address\u001b[0;1m?`,
+    message: `${white}Enter the ${blue}email address${white}?`,
     default: "callasteven@gmail.com",
     validate(answer) {
       return isEmail(answer);
@@ -195,7 +195,7 @@ const questionsUpdateEmployeeRole = [ // maps to Add Role
   prefix: "⠋🟡 1 of 2)",
   type: "rawlist",
   name: "role",
-  message: `\u001b[0;1mSelect \x1b[36;1memployee\u001b[0;1m to update?`,
+  message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
   choices: choicesEmployees,
   default: "Manager",
   suffix: " 🟡",
@@ -204,7 +204,7 @@ const questionsUpdateEmployeeRole = [ // maps to Add Role
   prefix: "⠋🟡 2 of 2)",
   type: "rawlist",
   name: "newRole",
-  message: `\u001b[0;1mSelect \x1b[36;1new role\u001b[0;1m?`,
+  message: `\u001b[0;1mSelect ${blue}new role${white}?`,
   choices: choicesRoles,
   default: "Manager",
   suffix: " 🟡",
@@ -217,5 +217,4 @@ module.exports = {
   questionsAddRole,
   questionsAddEmployee,
   questionsUpdateEmployeeRole,
-
 };
