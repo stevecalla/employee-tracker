@@ -6,20 +6,20 @@ const {
   getUpdateEmployeeRole,
 } = require("./runInquirer");
 const { appBanner } = require("./appBanner");
+const { blue } = require("../../lib/util");
 
-questionPrompts = async () => {
-  // console.log(`\n\u001b[0;1mLET'S GET STARTED!!`);
-
+//ASK USER WHAT ACTION TO PERFORM
+getWhatToDo = async () => {
   await getUserChoice()
     .then((choices) => choices.userSelection) //passes selection to next then statement
-    .then((selection) => {
+    .then((selection) => { //determine which question or data to display
       console.log(selection);
       switch (selection) {
         case "View All Employees":
           //todo:get and render list of employees
           console.log("Get & Render a list of all employees!!");
           console.log("------------------------\n");
-          questionPrompts();
+          getWhatToDo();
           break;
         case "Add Employee":
           getInfo(getEmployee, "employee");
@@ -31,7 +31,7 @@ questionPrompts = async () => {
           //todo:get and render list of roles
           console.log("Get & Render a list of all roles!!");
           console.log("------------------------\n");
-          questionPrompts();
+          getWhatToDo();
           break;
         case "Add Role":
           getInfo(getRole, "role");
@@ -40,7 +40,7 @@ questionPrompts = async () => {
           //todo:get and render list of departments
           console.log("Get and Render a list of all departments!!");
           console.log("------------------------\n");
-          questionPrompts();
+          getWhatToDo();
           break;
         case "Add Department":
           getInfo(getDepartment, "department");
@@ -51,16 +51,32 @@ questionPrompts = async () => {
     }});
 };
 
+// ASK USER TO INPUT EMPLOYEE, ROLE, DEPARTMENT OR ROLE UPDATE; PASS IN ASKQUESTION FUNCTION, TYPE OF QUESTION. RETURN TO THE GETWHATTODO FUNCTION
 getInfo = async (askQuestions, type) => {
+  let input = {};
   await askQuestions()
-    // .then((data) => console.log(data))
-    .then((data) => console.log(`Added XYZ to the database\ncreate class; write ${type} info to database`, data))
-    .then(() => questionPrompts())
+    .then((data) => input = data)
+    // .then(() => console.log(input))
+    .then(() => renderInput(input, type))
+    .then(() => getWhatToDo())
+
+    // Updated First Last Names role to XYZ
+    // .then(() => create class using input)
+    // .then(() => write to database using new class method?)
+    // .then(() => console.log(`${input.role} ${type}`))
 };
 
+//DETERMINE WHICH INPUT TO RENDER TO THE USER
+renderInput = (input, type) => {
+  let inputToRender = "";
+  input.firstName ? inputToRender = `${input.firstName} ${input.lastName}` : input.department ? inputToRender = input.department : inputToRender = input.role
+
+  type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.newRole}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
+}
+
 // console.log(appBanner);
-questionPrompts();
+getWhatToDo();
 
 module.exports = {
-  // questionPrompts,
+  // getWhatToDo,
 };

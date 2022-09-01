@@ -32,10 +32,10 @@ choicesRoles = [
 ];
 
 choicesEmployees = [
-  "a",
-  "b",
-  "c",
-  "d",
+  "John Staple",
+  "Bessie Longtree",
+  "Rita Haysnoot",
+  "Wilma Testy",
 ];
 
 const questionsUserChoice = [
@@ -99,7 +99,7 @@ const questionsAddRole = [ // maps to Add Role
 {
   prefix: "⠋🟡 3 of 3)",
   type: "rawlist",
-  name: "department",
+  name: "roleDepartment",
   message: `${white}Enter the ${blue}department${white} of the role?`,
   choices: choicesDepartments,
   // default: "Manager",
@@ -154,7 +154,7 @@ const questionsAddEmployee = [
     prefix: "⠋🟡 4 of 6)",
     type: "rawlist",
     name: "employeeManager",
-    message: `${white}Enter the ${blue}employee's manager${white};1m?`,
+    message: `${white}Enter the ${blue}employee's manager${white}?`,
     choices: choicesEmployees,
     default: "Joanne Smith",
     suffix: " 🟡",
@@ -194,10 +194,10 @@ const questionsUpdateEmployeeRole = [ // maps to Add Role
 {
   prefix: "⠋🟡 1 of 2)",
   type: "rawlist",
-  name: "role",
+  name: "employee",
   message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
   choices: choicesEmployees,
-  default: "Manager",
+  // default: "Manager",
   suffix: " 🟡",
 },
 {
