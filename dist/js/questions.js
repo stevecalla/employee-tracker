@@ -82,7 +82,7 @@ const questionsAddRole = [ // maps to Add Role
 {
   prefix: "⠋🟡 2 of 3)",
   type: "input",
-  name: "department",
+  name: "salary",
   message: `\u001b[0;1mEnter the \x1b[36;1msalary\u001b[0;1m of the role (with no commas)?`,
   default: "10000",
   suffix: " 🟡",
@@ -99,7 +99,7 @@ const questionsAddRole = [ // maps to Add Role
 {
   prefix: "⠋🟡 3 of 3)",
   type: "rawlist",
-  name: "salary",
+  name: "department",
   message: `\u001b[0;1mEnter the \x1b[36;1mdepartment\u001b[0;1m of the role?`,
   choices: choicesDepartments,
   // default: "Manager",
@@ -152,17 +152,18 @@ const questionsAddEmployee = [
   },
   {
     prefix: "⠋🟡 4 of 6)",
-    type: "input",
-    name: "role",
+    type: "rawlist",
+    name: "employeeManager",
     message: `\u001b[0;1mEnter the \x1b[36;1memployee's manager\u001b[0;1m?`,
-    default: "Manager",
+    choices: choicesEmployees,
+    default: "Joanne Smith",
     suffix: " 🟡",
-    validate(answer) {
-      return isBlank(answer, "the role");
-    },
-    filter(answer) {
-      return answer.trim();
-    },
+    // validate(answer) {
+    //   return isBlank(answer, "the role");
+    // },
+    // filter(answer) {
+    //   return capitalizeFirstCharacter(answer);
+    // },
   },
   {
     prefix: "⠋🟡 5 of 6)",

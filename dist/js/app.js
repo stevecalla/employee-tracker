@@ -21,11 +21,10 @@ questionPrompts = async () => {
           questionPrompts();
           break;
         case "Add Employee":
-          // getEmployeeInfo();
           getInfo(getEmployee, "employee");
           break;
         case "Update Employee Role":
-          getInfo(getUpdateEmployeeRole);
+          getInfo(getUpdateEmployeeRole, "updateRole");
           break;
         case "View All Roles":
           //todo:get and render list of roles
@@ -54,7 +53,7 @@ questionPrompts = async () => {
 getInfo = async (askQuestions, type) => {
   await askQuestions()
     // .then((data) => console.log(data))
-    .then((data) => console.log(`create class; write ${type} info to database`, data))
+    .then((data) => console.log(`Added XYZ to the database\ncreate class; write ${type} info to database`, data))
     .then(() => questionPrompts())
 };
 
