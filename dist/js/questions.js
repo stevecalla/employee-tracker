@@ -43,7 +43,7 @@ const questionsUserChoice = [
     prefix: "\n⠋🟡",
     type: "rawlist",
     name: "userSelection",
-    message: "What would you like to do?",
+    message: "\u001b[0;1mWhat would you like to do?",
     choices: choicesStart,
     suffix: " 🟡",
   },
