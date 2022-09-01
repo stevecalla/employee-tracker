@@ -5,9 +5,6 @@ const {
   getEmployee,
   getUpdateEmployeeRole,
 } = require("./runInquirer");
-// const { createMembers } = require("./createMembers.js");
-// const { createHTML } = require("./createHTML.js");
-// let teamMembers = [];
 
 questionPrompts = async () => {
   // console.log(`\n\u001b[0;1mLET'S GET STARTED!!`);
