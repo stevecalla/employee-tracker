@@ -1,27 +1,25 @@
 const {
-  getStart,
+  getUserChoice,
   getDepartment,
   getRole,
   getEmployee,
   getUpdateEmployeeRole,
 } = require("./runInquirer");
-const { createMembers } = require("./createMembers.js");
-const { createHTML } = require("./createHTML.js");
-let teamMembers = [];
+// const { createMembers } = require("./createMembers.js");
+// const { createHTML } = require("./createHTML.js");
+// let teamMembers = [];
 
 questionPrompts = async () => {
-  // let basicInfo = {};
-  let start = "";
   // console.log(`\n\u001b[0;1mLET'S GET STARTED!!`);
 
-  await getStart()
-    .then((data) => start = data.startQuestion)
-    .then((data) => {
-      console.log(data);
-      switch (data) {
+  await getUserChoice()
+    .then((choices) => choices.userSelection) //passes selection to next then statement
+    .then((selection) => {
+      console.log(selection);
+      switch (selection) {
         case "View All Employees":
           //todo:get and render list of employees
-          console.log("Render a list of all employees!!");
+          console.log("Get & Render a list of all employees!!");
           console.log("------------------------\n");
           questionPrompts();
           break;
@@ -34,7 +32,7 @@ questionPrompts = async () => {
           break;
         case "View All Roles":
           //todo:get and render list of roles
-          console.log("Render a list of all roles!!");
+          console.log("Get & Render a list of all roles!!");
           console.log("------------------------\n");
           questionPrompts();
           break;
@@ -43,7 +41,7 @@ questionPrompts = async () => {
           break;
         case "View All Departments":
           //todo:get and render list of departments
-          console.log("Render a list of all departments!!");
+          console.log("Get and Render a list of all departments!!");
           console.log("------------------------\n");
           questionPrompts();
           break;
@@ -51,7 +49,7 @@ questionPrompts = async () => {
           getInfo(getDepartment, "department");
           break;
         default:
-          console.log(data, data.startQuestion, 'end')
+          console.log(selection)
           process.exit();
     }});
 };

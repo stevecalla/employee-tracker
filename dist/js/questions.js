@@ -38,11 +38,11 @@ choicesEmployees = [
   "d",
 ];
 
-const questionsStart = [
+const questionsUserChoice = [
   {
     prefix: "\n⠋🟡",
     type: "rawlist",
-    name: "startQuestion",
+    name: "userSelection",
     message: "What would you like to do?",
     choices: choicesStart,
     suffix: " 🟡",
@@ -51,7 +51,7 @@ const questionsStart = [
 
 const questionsAddDepartment = [ // maps to Add Department
   {
-    prefix: "⠋🟡 5)",
+    prefix: "⠋🟡 1 of 1)",
     type: "input",
     name: "department",
     message: `\u001b[0;1mEnter the name of the \x1b[36;1mdepartment\u001b[0;1m?`,
@@ -73,7 +73,7 @@ const questionsAddRole = [ // maps to Add Role
   name: "role",
   message: `\u001b[0;1mEnter the \x1b[36;1mrole\u001b[0;1m?`,
   choices: choicesRoles,
-  default: "Manager",
+  default: "New Role",
   suffix: " 🟡",
   filter(answer) {
     return capitalizeFirstCharacter(answer);
@@ -106,7 +106,7 @@ const questionsAddRole = [ // maps to Add Role
 
 const questionsAddEmployee = [
   {
-    prefix: "⠋🟡 1)",
+    prefix: "⠋🟡 1 of 6)",
     type: "input",
     name: "firstName",
     message: `\u001b[0;1mEnter the \x1b[36;1mfirst\u001b[0;1m name?`,
@@ -120,7 +120,7 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 2)",
+    prefix: "⠋🟡 2 of 6)",
     type: "input",
     name: "lastName",
     message: `\u001b[0;1mEnter the \x1b[36;1mlast\u001b[0;1m name?`,
@@ -134,7 +134,7 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 5)",
+    prefix: "⠋🟡 3 of 6)",
     type: "input",
     name: "role",
     message: `\u001b[0;1mEnter the \x1b[36;1memployee's role\u001b[0;1m?`,
@@ -148,7 +148,7 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 5)",
+    prefix: "⠋🟡 4 of 6)",
     type: "input",
     name: "role",
     message: `\u001b[0;1mEnter the \x1b[36;1memployee's manager\u001b[0;1m?`,
@@ -162,7 +162,7 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 3)",
+    prefix: "⠋🟡 5 of 6)",
     name: "employeeId",
     type: "input",
     message: `\u001b[0;1mEnter the \x1b[36;1memployee ID\u001b[0;1m?`,
@@ -175,7 +175,7 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 4)",
+    prefix: "⠋🟡 6 of 6)",
     name: "emailAddress",
     type: "input",
     message: `\u001b[0;1mEnter the \x1b[36;1memail address\u001b[0;1m?`,
@@ -208,7 +208,7 @@ const questionsUpdateEmployeeRole = [ // maps to Add Role
 ];
 
 module.exports = {
-  questionsStart,
+  questionsUserChoice,
   questionsAddDepartment,
   questionsAddRole,
   questionsAddEmployee,

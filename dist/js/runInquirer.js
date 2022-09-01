@@ -1,14 +1,14 @@
 const inquirer = require("inquirer");
 const {
-  questionsStart,
+  questionsUserChoice,
   questionsAddDepartment,
   questionsAddRole,
   questionsAddEmployee,
   questionsUpdateEmployeeRole,
 } = require("./questions");
 
-getStart = () => {
-  const start = inquirer.prompt(questionsStart);
+getUserChoice = () => {
+  const start = inquirer.prompt(questionsUserChoice);
   return start;
 };
 
@@ -33,7 +33,7 @@ getUpdateEmployeeRole = () => {
 };
 
 module.exports = {
-  getStart,
+  getUserChoice,
   getDepartment,
   getRole,
   getEmployee,
