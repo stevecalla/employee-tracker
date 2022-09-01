@@ -7,6 +7,8 @@ const {
 } = require("./runInquirer");
 const { banner } = require("./banner");
 const { blue } = require("../../lib/util");
+// const consoleTable = require('console.table');
+const { seedData } = require('../db/seedData');
 
 //ASK USER WHAT ACTION TO PERFORM
 getWhatToDo = async () => {
@@ -18,6 +20,7 @@ getWhatToDo = async () => {
         case "View All Employees":
           //todo:get and render list of employees
           console.log("Get & Render a list of all employees!!");
+          tableOutput();
           console.log("------------------------\n");
           getWhatToDo();
           break;
@@ -30,6 +33,7 @@ getWhatToDo = async () => {
         case "View All Roles":
           //todo:get and render list of roles
           console.log("Get & Render a list of all roles!!");
+          tableOutput();
           console.log("------------------------\n");
           getWhatToDo();
           break;
@@ -39,6 +43,7 @@ getWhatToDo = async () => {
         case "View All Departments":
           //todo:get and render list of departments
           console.log("Get and Render a list of all departments!!");
+          tableOutput();
           console.log("------------------------\n");
           getWhatToDo();
           break;
@@ -74,7 +79,11 @@ renderInput = (input, type) => {
   type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.newRole}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
 }
 
-console.log(banner);
+tableOutput = () => {
+  console.table(seedData);
+};
+
+// console.log(banner);
 getWhatToDo();
 
 module.exports = {
