@@ -1,65 +1,41 @@
 const inquirer = require("inquirer");
 const {
-  questionsRole,
-  questionsBasicInfo,
-  questionsManager,
-  questionsEngineer,
-  questionsIntern,
-  questionsContinue,
+  questionsStart,
+  questionsAddDepartment,
+  questionsAddRole,
+  questionsAddEmployee,
+  questionsUpdateEmployeeRole,
 } = require("./questions");
 
-getBasicInfo = () => {
-  const employeeAnswers = inquirer.prompt(questionsBasicInfo);
-  return employeeAnswers;
+getStart = () => {
+  const start = inquirer.prompt(questionsStart);
+  return start;
+};
+
+getDepartment = () => {
+  const addDepartment = inquirer.prompt(questionsAddDepartment);
+  return addDepartment;
 };
 
 getRole = () => {
-  const selectRole = inquirer.prompt(questionsRole);
-  return selectRole;
+  const addRole = inquirer.prompt(questionsAddRole);
+  return addRole;
 };
 
-getManagerInfo = () => {
-  const managerInfo = inquirer.prompt(questionsManager);
-  return managerInfo;
+getEmployee = () => {
+  const addEmployee = inquirer.prompt(questionsAddEmployee);
+  return addEmployee;
 };
 
-getEngineerInfo = () => {
-  const engineerInfo = inquirer.prompt(questionsEngineer);
-
-  return engineerInfo;
-};
-
-getInternInfo = () => {
-  const internInfo = inquirer.prompt(questionsIntern);
-  return internInfo;
-};
-
-getRoleQuestion = (role) => {
-  let employeeDetails = {};
-  switch (role) {
-    case "Engineer":
-      employeeDetails = getEngineerInfo();
-      break;
-    case "Intern":
-      employeeDetails = getInternInfo();
-      break;
-    default:
-      employeeDetails = getManagerInfo();
-  }
-  return employeeDetails;
-};
-
-confirmContinue = async () => {
-  const confirm = await inquirer.prompt(questionsContinue);
-  return confirm.isContinue;
+getUpdateEmployeeRole = () => {
+  const updateEmployeeRole = inquirer.prompt(questionsUpdateEmployeeRole);
+  return updateEmployeeRole;
 };
 
 module.exports = {
-  getBasicInfo,
+  getStart,
+  getDepartment,
   getRole,
-  getManagerInfo,
-  getEngineerInfo,
-  getInternInfo,
-  getRoleQuestion,
-  confirmContinue,
+  getEmployee,
+  getUpdateEmployeeRole,
 };

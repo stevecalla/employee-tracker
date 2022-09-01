@@ -1,17 +1,102 @@
 const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank } = require("../../lib/util");
 
-const questionsRole = [
+choicesStart = [
+  "View All Employees", // todo:returns a table of employees
+  "Add Employee", // see questionsAddEmployee
+  "Update Employee Role", // see questionsUpdateEmployee Role
+  "View All Roles", // todo:returns a table of role
+  "Add Role", // see questionsAddRole; //todo:need to update roles choice list with new role
+  "View All Departments", // todo:returns a table of departments
+  "Add Department", // see questionsAddDepartment
+  "Quit",
+];
+
+choicesDepartments = [
+  "Engineering",
+  "Finance",
+  "Legal",
+  "Sales",
+  "Service",
+];
+
+choicesRoles = [
+  "Sales Lead",  //sales
+  "Sales Person", //sales
+  "Lead Engineer", //engineering
+  "Software Engineer",  //engineering
+  "Account Manager", //finance
+  "Accountant", //finance
+  "Legal Team Lead", //legal
+  "Lawyer", //legal
+  "Customer Service Representative", //service
+];
+
+choicesEmployees = [
+  "a",
+  "b",
+  "c",
+  "d",
+];
+
+const questionsStart = [
   {
     prefix: "\n⠋🟡",
     type: "rawlist",
-    name: "role",
-    message: "Please select the employee's role?",
-    choices: ["Engineer", "Intern"],
+    name: "startQuestion",
+    message: "What would you like to do?",
+    choices: choicesStart,
     suffix: " 🟡",
   },
 ];
 
-const questionsBasicInfo = [
+const questionsAddDepartment = [ // maps to Add Department
+  {
+    prefix: "⠋🟡 5)",
+    type: "rawlist",
+    name: "department",
+    message: `\u001b[0;1mEnter the name of the \x1b[36;1mdepartment\u001b[0;1m?`,
+    choices: choicesDepartments,
+    // default: "Human Resources",
+    suffix: " 🟡",
+  },
+];
+
+const questionsAddRole = [ // maps to Add Role
+{
+  prefix: "⠋🟡 5)",
+  type: "input",
+  name: "role",
+  message: `\u001b[0;1mEnter the \x1b[36;1mrole\u001b[0;1m?`,
+  choices: choicesRoles,
+  default: "Manager",
+  suffix: " 🟡",
+},
+{
+  prefix: "⠋🟡 5)",
+  type: "input",
+  name: "department",
+  message: `\u001b[0;1mEnter the \x1b[36;1msalary\u001b[0;1m of the role?`,
+  default: "Human Resources",
+  suffix: " 🟡",
+  validate(answer) {
+    return isBlank(answer, "the salary");
+  },
+  filter(answer) {
+    return answer.trim();
+  },
+},
+{
+  prefix: "⠋🟡 5)",
+  type: "input",
+  name: "role",
+  message: `\u001b[0;1mEnter the \x1b[36;1mdepartment\u001b[0;1m of the role?`,
+  choices: choicesDepartments,
+  // default: "Manager",
+  suffix: " 🟡",
+},
+];
+
+const questionsAddEmployee = [
   {
     prefix: "⠋🟡 1)",
     type: "input",
@@ -41,6 +126,34 @@ const questionsBasicInfo = [
     },
   },
   {
+    prefix: "⠋🟡 5)",
+    type: "input",
+    name: "role",
+    message: `\u001b[0;1mEnter the \x1b[36;1memployee's role\u001b[0;1m?`,
+    default: "Manager",
+    suffix: " 🟡",
+    validate(answer) {
+      return isBlank(answer, "the role");
+    },
+    filter(answer) {
+      return answer.trim();
+    },
+  },
+  {
+    prefix: "⠋🟡 5)",
+    type: "input",
+    name: "role",
+    message: `\u001b[0;1mEnter the \x1b[36;1memployee's manager\u001b[0;1m?`,
+    default: "Manager",
+    suffix: " 🟡",
+    validate(answer) {
+      return isBlank(answer, "the role");
+    },
+    filter(answer) {
+      return answer.trim();
+    },
+  },
+  {
     prefix: "⠋🟡 3)",
     name: "employeeId",
     type: "input",
@@ -65,73 +178,32 @@ const questionsBasicInfo = [
   },
 ];
 
-const questionsManager = [
-  {
-    prefix: "⠋🟡 5)",
-    type: "input",
-    name: "officeNumber",
-    message: `\u001b[0;1mEnter the manager's \x1b[36;1moffice number\u001b[0;1m?`,
-    default: "10",
-    suffix: " 🟡",
-    validate(answer) {
-      return isBlank(answer, "manager's office number");
-    },
-    filter(answer) {
-      return answer.trim();
-    },
-  },
-];
-
-const questionsEngineer = [
-  {
-    prefix: "⠋🟡 5)",
-    type: "input",
-    name: "gitHubUserName",
-    message: `\u001b[0;1mEnter the engineer's \x1b[36;1mGitHub user name\u001b[0;1m?`,
-    default: "stevecalla",
-    suffix: " 🟡",
-    validate(answer) {
-      return isBlank(answer, "engineer' GitHub user name");
-    },
-    filter(answer) {
-      return lowerCase(answer);
-    },
-  },
-];
-
-const questionsIntern = [
-  {
-    prefix: "⠋🟡 5)",
-    type: "input",
-    name: "internSchool",
-    message: `\u001b[0;1mEnter the intern's\x1b[36;1mschool.\u001b[0;1m?`,
-    default: "Oxford",
-    suffix: " 🟡",
-    validate(answer) {
-      return isBlank(answer, "intern's school");
-    },
-    filter(answer) {
-      return capitalizeFirstCharacter(answer);
-    },
-  },
-];
-
-const questionsContinue = [
-  {
-    prefix: "\n⠋🟡",
-    type: "confirm",
-    name: "isContinue",
-    message: `Would you like to add more team members?`,
-    default: "true",
-    suffix: " 🟡",
-  },
+const questionsUpdateEmployeeRole = [ // maps to Add Role
+{
+  prefix: "⠋🟡 5)",
+  type: "input",
+  name: "role",
+  message: `\u001b[0;1mSelect \x1b[36;1employee\u001b[0;1m to update?`,
+  choices: choicesEmployees,
+  default: "Manager",
+  suffix: " 🟡",
+},
+{
+  prefix: "⠋🟡 5)",
+  type: "input",
+  name: "role",
+  message: `\u001b[0;1mSelect \x1b[36;1new role\u001b[0;1m?`,
+  choices: choicesRoles,
+  default: "Manager",
+  suffix: " 🟡",
+},
 ];
 
 module.exports = {
-  questionsRole,
-  questionsBasicInfo,
-  questionsManager,
-  questionsEngineer,
-  questionsIntern,
-  questionsContinue,
+  questionsStart,
+  questionsAddDepartment,
+  questionsAddRole,
+  questionsAddEmployee,
+  questionsUpdateEmployeeRole,
+
 };
