@@ -13,6 +13,11 @@ VALUES  ("Sales Lead", "10000", 4),
 -- SHOW TABLES;
 DESCRIBE roles;
 SELECT * FROM roles;
+SELECT 
+  id,
+  title
+FROM roles
+ORDER BY id;
 
 -- use employee_manager_db;
 -- source ../../db/seedRoles.sql;
