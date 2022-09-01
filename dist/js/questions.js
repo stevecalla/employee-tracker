@@ -52,43 +52,51 @@ const questionsStart = [
 const questionsAddDepartment = [ // maps to Add Department
   {
     prefix: "⠋🟡 5)",
-    type: "rawlist",
+    type: "input",
     name: "department",
     message: `\u001b[0;1mEnter the name of the \x1b[36;1mdepartment\u001b[0;1m?`,
-    choices: choicesDepartments,
-    // default: "Human Resources",
+    default: "New Department",
     suffix: " 🟡",
+    validate(answer) {
+      return isBlank(answer, "department name");
+    },
+    filter(answer) {
+      return capitalizeFirstCharacter(answer);
+    },
   },
 ];
 
 const questionsAddRole = [ // maps to Add Role
 {
-  prefix: "⠋🟡 5)",
+  prefix: "⠋🟡 1 of 3)",
   type: "input",
   name: "role",
   message: `\u001b[0;1mEnter the \x1b[36;1mrole\u001b[0;1m?`,
   choices: choicesRoles,
   default: "Manager",
   suffix: " 🟡",
+  filter(answer) {
+    return capitalizeFirstCharacter(answer);
+  }
 },
 {
-  prefix: "⠋🟡 5)",
+  prefix: "⠋🟡 2 of 3)",
   type: "input",
   name: "department",
-  message: `\u001b[0;1mEnter the \x1b[36;1msalary\u001b[0;1m of the role?`,
-  default: "Human Resources",
+  message: `\u001b[0;1mEnter the \x1b[36;1msalary\u001b[0;1m of the role (with no commas)?`,
+  default: "10000",
   suffix: " 🟡",
   validate(answer) {
-    return isBlank(answer, "the salary");
+    return isNumber(answer);
   },
   filter(answer) {
-    return answer.trim();
+    return answer;
   },
 },
 {
-  prefix: "⠋🟡 5)",
-  type: "input",
-  name: "role",
+  prefix: "⠋🟡 3 of 3)",
+  type: "rawlist",
+  name: "salary",
   message: `\u001b[0;1mEnter the \x1b[36;1mdepartment\u001b[0;1m of the role?`,
   choices: choicesDepartments,
   // default: "Manager",
@@ -180,18 +188,18 @@ const questionsAddEmployee = [
 
 const questionsUpdateEmployeeRole = [ // maps to Add Role
 {
-  prefix: "⠋🟡 5)",
-  type: "input",
+  prefix: "⠋🟡 1 of 2)",
+  type: "rawlist",
   name: "role",
-  message: `\u001b[0;1mSelect \x1b[36;1employee\u001b[0;1m to update?`,
+  message: `\u001b[0;1mSelect \x1b[36;1memployee\u001b[0;1m to update?`,
   choices: choicesEmployees,
   default: "Manager",
   suffix: " 🟡",
 },
 {
-  prefix: "⠋🟡 5)",
-  type: "input",
-  name: "role",
+  prefix: "⠋🟡 2 of 2)",
+  type: "rawlist",
+  name: "newRole",
   message: `\u001b[0;1mSelect \x1b[36;1new role\u001b[0;1m?`,
   choices: choicesRoles,
   default: "Manager",

@@ -9,7 +9,7 @@ const { createMembers } = require("./createMembers.js");
 const { createHTML } = require("./createHTML.js");
 let teamMembers = [];
 
-getTeamDetails = async () => {
+questionPrompts = async () => {
   // let basicInfo = {};
   let start = "";
   // console.log(`\n\u001b[0;1mLET'S GET STARTED!!`);
@@ -23,31 +23,32 @@ getTeamDetails = async () => {
           //todo:get and render list of employees
           console.log("Render a list of all employees!!");
           console.log("------------------------\n");
-          getTeamDetails();
+          questionPrompts();
           break;
         case "Add Employee":
-          getEmployeeInfo();
+          // getEmployeeInfo();
+          getInfo(getEmployee, "employee");
           break;
         case "Update Employee Role":
-          updateEmployeeRole();
+          getInfo(getUpdateEmployeeRole);
           break;
         case "View All Roles":
           //todo:get and render list of roles
           console.log("Render a list of all roles!!");
           console.log("------------------------\n");
-          getTeamDetails();
+          questionPrompts();
           break;
         case "Add Role":
-          getRoleInfo();
+          getInfo(getRole, "role");
           break;
         case "View All Departments":
           //todo:get and render list of departments
           console.log("Render a list of all departments!!");
           console.log("------------------------\n");
-          getTeamDetails();
+          questionPrompts();
           break;
         case "Add Department":
-          getDepartmentInfo();
+          getInfo(getDepartment, "department");
           break;
         default:
           console.log(data, data.startQuestion, 'end')
@@ -55,32 +56,15 @@ getTeamDetails = async () => {
     }});
 };
 
-getEmployeeInfo = async () => {
-  await getEmployee()
-    .then((data) => console.log('write employee info to database'))
-    .then(() => getTeamDetails())
+getInfo = async (askQuestions, type) => {
+  await askQuestions()
+    // .then((data) => console.log(data))
+    .then((data) => console.log(`create class; write ${type} info to database`, data))
+    .then(() => questionPrompts())
 };
 
-getDepartmentInfo = async () => {
-  await getDepartment()
-    .then((data) => console.log('write department info to database'))
-    .then(() => getTeamDetails())
-};
-
-getRoleInfo = async () => {
-  await getRole()
-    .then((data) => console.log('write role info to database'))
-    .then(() => getTeamDetails())
-};
-
-update = async () => {
-  await getUpdateEmployeeRole()
-    .then((data) => console.log('write update role to database'))
-    .then(() => getTeamDetails())
-};
-
-getTeamDetails();
+questionPrompts();
 
 module.exports = {
-  // getTeamDetails,
+  // questionPrompts,
 };
