@@ -83,14 +83,15 @@ fetchEmployees = (path, selection) => {
 }
 
 tableOutput = (data = seedData, selection = "Hello") => {
-  // console.log(`${blue}\n------------------------\n${white}`);
-  console.log(`${blue}\n----------- ${selection} -----------\n${white}`);
+  let lineBreak = `\n`;
+  let title = `----------- ${selection} -----------`;
+
+  console.log(`${blue}${lineBreak}${title}${white}${lineBreak}`);
   console.table(data);
-  console.log(`${blue}----------- ${selection} -----------\n${white}`);
+  console.log(`${blue}${title}${white}`);
 };
 
-// console.log(banner);
-// fetchEmployees();
+console.log(banner);
 getWhatToDo();
 
 module.exports = {
