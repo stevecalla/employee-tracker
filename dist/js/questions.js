@@ -1,4 +1,5 @@
 const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../lib/util");
+// const { connectDb } = require('../../database');
 
 choicesStart = [
   "View All Employees", // todo:returns a table of employees
@@ -11,13 +12,37 @@ choicesStart = [
   "Quit",
 ];
 
-choicesDepartments = [
-  "Engineering",
-  "Finance",
-  "Legal",
-  "Sales",
-  "Service",
-];
+choicesDepartments = () => {
+  // let test = [];
+
+  // connectDb.promise().query("SELECT id, name FROM departments ORDER BY id;")
+  //   .then(([rows, fields]) => {
+  //     console.log(rows)
+  //     test = rows.map(element => element.name);
+  //     console.log('1 = ', test);
+  //     test2(test);
+  //   })
+  //   .catch(console.log)
+  //   .then( () => connectDb.end());
+
+  // console.log('2 = ', test);
+  // return test;
+  let departments = [
+    "Engineering",
+    "Finance",
+    "Legal",
+    "Sales",
+    "Service",
+  ]
+  return departments;
+  // return [
+  //   "Engineering",
+  //   "Finance",
+  //   "Legal",
+  //   "Sales",
+  //   "Service",
+  // ]
+}
 
 choicesRoles = [
   "Sales Lead",  //sales
