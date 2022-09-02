@@ -8,7 +8,7 @@ const {
 const { banner } = require("./banner");
 const { blue, white } = require("../../lib/util");
 const consoleTable = require('console.table');
-const { seedData } = require('../db/seedData');
+const { seedData } = require('../../db/testData');
 const axios = require('axios');
 
 //ASK USER WHAT ACTION TO PERFORM
@@ -85,13 +85,12 @@ fetchEmployees = (path, selection) => {
 tableOutput = (data = seedData, selection = "Hello") => {
   let lineBreak = `\n`;
   let title = `----------- ${selection} -----------`;
-
   console.log(`${blue}${lineBreak}${title}${white}${lineBreak}`);
   console.table(data);
   console.log(`${blue}${title}${white}`);
 };
 
-console.log(banner);
+// console.log(banner);
 getWhatToDo();
 
 module.exports = {
