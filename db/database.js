@@ -1,4 +1,7 @@
 //CONNECT TO DATABASE
+// const mysql = require(`mysql-await`);
+// https://www.npmjs.com/package/mysql-await
+
 const mysql = require('mysql2');
 
 const db = mysql.createConnection(
