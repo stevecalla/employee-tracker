@@ -6,23 +6,19 @@ const {
   getUpdateEmployeeRole,
 } = require("./runInquirer");
 const { banner } = require("./banner");
-const { blue } = require("../../lib/util");
+const { blue, white } = require("../../lib/util");
 const consoleTable = require('console.table');
 const { seedData } = require('../db/seedData');
+const axios = require('axios');
 
 //ASK USER WHAT ACTION TO PERFORM
 getWhatToDo = async () => {
   await getUserChoice()
     .then((choices) => choices.userSelection) //passes selection to next then statement
     .then((selection) => { //determine which question or data to display
-      console.log(selection);
       switch (selection) {
         case "View All Employees":
-          //todo:get and render list of employees
-          console.log("Get & Render a list of all employees!!");
-          tableOutput();
-          console.log("------------------------\n");
-          getWhatToDo();
+          fetchEmployees('api/employees', selection);
           break;
         case "Add Employee":
           getInfo(getEmployee, "employee");
@@ -31,21 +27,13 @@ getWhatToDo = async () => {
           getInfo(getUpdateEmployeeRole, "updateRole");
           break;
         case "View All Roles":
-          //todo:get and render list of roles
-          console.log("Get & Render a list of all roles!!");
-          tableOutput();
-          console.log("------------------------\n");
-          getWhatToDo();
+          fetchEmployees('api/roles', selection);
           break;
         case "Add Role":
           getInfo(getRole, "role");
           break;
         case "View All Departments":
-          //todo:get and render list of departments
-          console.log("Get and Render a list of all departments!!");
-          tableOutput();
-          console.log("------------------------\n");
-          getWhatToDo();
+          fetchEmployees('api/departments', selection);
           break;
         case "Add Department":
           getInfo(getDepartment, "department");
@@ -79,11 +67,30 @@ renderInput = (input, type) => {
   type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.newRole}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
 }
 
-tableOutput = () => {
-  console.table(seedData);
+fetchEmployees = (path, selection) => {
+  axios.get(`http://localhost:3001/${path}`)
+  .then(function (response) {
+    // handle success
+    tableOutput(response.data, selection);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .then(function () {
+    getWhatToDo();
+  });
+}
+
+tableOutput = (data = seedData, selection = "Hello") => {
+  // console.log(`${blue}\n------------------------\n${white}`);
+  console.log(`${blue}\n----------- ${selection} -----------\n${white}`);
+  console.table(data);
+  console.log(`${blue}----------- ${selection} -----------\n${white}`);
 };
 
 // console.log(banner);
+// fetchEmployees();
 getWhatToDo();
 
 module.exports = {
