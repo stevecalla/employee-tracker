@@ -1,43 +1,59 @@
 const express = require('express');
-// Import and require mysql2
+const path = require('path');
 const mysql = require('mysql2');
 
 const PORT = process.env.PORT || 3001;
+
 const app = express();
 
-// Express middleware
-app.use(express.urlencoded({ extended: false }));
+// Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// app.use('/api', api);
+
+app.use(express.static('public'));
+
 
 // Connect to database
 const db = mysql.createConnection(
   {
     host: 'localhost',
-    // MySQL username,
     user: 'root',
-    // MySQL password
     password: 'denverdenver',
-    database: 'classlist_db'
+    database: 'employee_manager_db'
   },
-  console.log(`Connected to the classlist_db database.`)
+  console.log(`Connected to the books_db database.`)
 );
 
-// Query database
-db.query('SELECT * FROM students', function (err, results) {
-// db.query('SELECT * FROM students WHERE last_name = "Smith"', function (err, results) {
-  console.log(results);
-  // results.forEach(element => console.log(element.first_name)); //section
-});
+// GET Route for employee data
+app.get('/api/employees', (req, res) =>
+  db.query('SELECT * FROM employees', function (err, results) {
+    // console.log(results);
+    res.send(results);
+  })
+);
 
-// Default response for any other request (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
+// GET Route for deparment name
+app.get('/api/departments', (req, res) =>
+  db.query('SELECT * FROM departments', function (err, results) {
+    res.send(results);
+  })
+);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// GET Route for employee roles/titles
+app.get('/api/roles', (req, res) =>
+  db.query('SELECT * FROM roles', function (err, results) {
+    res.send(results);
+  })
+);
 
-module.exports = {
-  db
-}
+// GET Route for homepage & 
+// fallback route for when a user attempts to visit routes that don't exist
+app.get('*', (req, res) =>
+  res.send('hello')
+  // res.sendFile(path.join(__dirname, '/public/index.html'))
+);
+
+app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT} 🚀`)
+);
