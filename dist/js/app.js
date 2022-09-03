@@ -130,12 +130,29 @@ postAllData = async (path, input, type, roleId, deptId, managerId) => {
       }
       break;
     default:
+      //CHECK TO SEE IF DEPARTMENT ALREADY EXISTS
       let deptExists = await fetchDepartmentId('api/departments', input.department, 'role');
 
+      console.log('dept exists = ', deptExists);
+      
+      //IF DEPARTMENT DOES NOT EXIST THEN INSERT
       if (deptExists === 0) {
-        //todo move to put route
-        db.query(`INSERT INTO departments(name) VALUES ("${input.department}")`);
+
+        console.log('bbbbb =', input.department)
+
+        axios.post(`http://localhost:3001/api/departments`, {
+          name: input.department,
+        })
+        //   .then(function (response) {
+        //   // console.log(response);
+        //   res.send('hello');
+        // })
+        .catch(function (error) {
+          // console.log(error);
+        });
+
       };
+
       break;
   }
 }

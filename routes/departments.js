@@ -14,8 +14,12 @@ departments.route('/')
   .post((req, res) => {
     //post the input using an INSERT QUERY
     // console.log('1 =', req);
-    // console.log('2 =', res.body);
+    // console.log('2 =', req.body.name);
+    
     res.send('hello');
+
+    db.query(`INSERT INTO departments(name) VALUES ("${req.body.name}")`);
+
   })
 
   departments.get('/:department', async (req, res) =>{
