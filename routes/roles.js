@@ -18,20 +18,12 @@ roles.route('/')
     res.send('hello');
   })
 
-  roles.get('/:role', (req, res) =>{
+  roles.get('/:role', async (req, res) =>{
     let title = req.params;
 
-    db.query(`SELECT id FROM roles WHERE title = "${title.role}"`, function (err, results) {
-      if (err) { console.log(err) }
-
-      console.log('2 = ', results, results.length, results[0].id)
-
-      let id = results[0].id
-      res.json(id);
-
-      // console.log('3 =', results[0].id)
-      // res.send(results[0].id)
-    })
+    let result = await db.awaitQuery(`SELECT id FROM roles WHERE title = "${title.role}"`);
+    // console.log('5 = ', result, result.length, result[0].id);
+    res.json(result[0].id);
   })
 
 module.exports = roles;

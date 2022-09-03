@@ -18,4 +18,15 @@ departments.route('/')
     res.send('hello');
   })
 
+  departments.get('/:department', async (req, res) =>{
+    let department = req.params;
+    console.log(department);
+
+    let result = await db.awaitQuery(`SELECT id FROM departments WHERE name = "${req.params.department}"`);
+    // console.log('5 = ', result, result.length, result[0].id);
+
+    console.log(result);
+    res.json(result[0].id);
+  })
+
 module.exports = departments;

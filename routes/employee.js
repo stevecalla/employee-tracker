@@ -18,4 +18,20 @@ employees.route('/')
     res.send('hello');
   })
 
+  employees.get('/:manager', async (req, res) =>{
+    let manager = req.params;
+      console.log(manager);
+
+    let firstName = req.params.manager.split(' ')[0];
+    let lastName = req.params.manager.split(' ')[1];
+
+    let result = await db.awaitQuery(`SELECT manager_id FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
+
+    console.log(result);
+    // console.log('5 = ', result, result.length, result[0].id);
+    res.json(result[0].manager_id);
+  })
+
+
+
 module.exports = employees;

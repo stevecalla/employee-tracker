@@ -55,7 +55,7 @@ getInfo = async (askQuestions, path, type) => {
   await askQuestions()
     .then((data) => input = data)
     // .then(() => console.log('INPUT = ', input))
-    .then(() => fetchRoleId('api/employees', input.role, type))
+    .then(() => fetchRoleId('api/roles', input.role, type))
     .then((id_1) => roleId = id_1)
     .then(() => fetchDepartmentId('api/departments', input.roleDepartment, type))
     .then((id_2) => deptId = id_2)
@@ -76,40 +76,65 @@ renderInput = (input, type) => {
 
 fetchDepartmentId = async (path, department, type) => {
   console.log('FETCH DEPT = ', path, department, type);
+  console.log('FETCH PATH = ', `http://localhost:3001/${path}/${department}`);
 
-  // if (path === 'api/roles') {
   if (type === 'role') {
-    let result = await db.awaitQuery(`SELECT id FROM departments WHERE name = "${department}"`);
-    console.log('2 = ', result, result.length, result[0].id);
-    return result[0].id;
+    let dept = await axios.get(`http://localhost:3001/${path}/${department}`);
+
+    return dept.data;
   }
+
+  //section
+  // // if (path === 'api/roles') {
+  // if (type === 'role') {
+  //   let result = await db.awaitQuery(`SELECT id FROM departments WHERE name = "${department}"`);
+  //   console.log('2 = ', result, result.length, result[0].id);
+  //   return result[0].id;
+  // }
 }
 
 fetchManagerId = async (path, employeeManager, type) => {
   console.log('FETCH MGR = ', path, employeeManager, type);
-  
-  // if (path === 'api/employees') {
+  console.log('FETCH PATH = ', `http://localhost:3001/${path}/${employeeManager}`);
+
   if (type === 'employee') {
-
-    let firstName = employeeManager.split(' ')[0];
-    let lastName = employeeManager.split(' ')[1];
-
-    let result = await db.awaitQuery(`SELECT manager_id FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
-
-    console.log('2 = ', result, result.length, result[0].manager_id);
-
-    return result[0].manager_id;
+    let managerId = await axios.get(`http://localhost:3001/${path}/${employeeManager}`);
+    // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
+    return managerId.data;
   }
+
+  //SECTION: WORKING DIRECT QUERY OF THE DATABASE
+  // // if (path === 'api/employees') {
+  // if (type === 'employee') {
+
+  //   let firstName = employeeManager.split(' ')[0];
+  //   let lastName = employeeManager.split(' ')[1];
+
+  //   let result = await db.awaitQuery(`SELECT manager_id FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
+
+  //   console.log('2 = ', result, result.length, result[0].manager_id);
+
+  //   return result[0].manager_id;
+  // }
 }
 
+// fetchRoleId = async (path, role, type) => {
 fetchRoleId = async (path, role, type) => {
   console.log('FETCH ROLE = ', path, role, type);
-  // if (path === 'api/employees') {
+  console.log('FETCH PATH = ', `http://localhost:3001/${path}/${role}`);
+
   if (type === 'employee') {
-    let result = await db.awaitQuery(`SELECT id FROM roles WHERE title = "${role}"`);
-    console.log('2 = ', result, result.length, result[0].id);
-    return result[0].id;
+    let roleId = await axios.get(`http://localhost:3001/${path}/${role}`);
+    // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
+    return roleId.data;
   }
+
+  //SECTION: WORKING DIRECT QUERY OF THE DATABASE
+  // if (type === 'employee') {
+  //   let result = await db.awaitQuery(`SELECT id FROM roles WHERE title = "${role}"`);
+  //   console.log('2 = ', result, result.length, result[0].id);
+  //   return result[0].id;
+  // }
 }
 
 postAllData = async (path, input, type, roleId, deptId, managerId) => {
@@ -122,19 +147,16 @@ postAllData = async (path, input, type, roleId, deptId, managerId) => {
       if (roleExists.length === 0) {
         db.query(`INSERT INTO roles(title, salary, department_id) VALUES ("${input.role}", "${input.salary}", "${deptId}")`);
       }
-      //todo add department from query
       break;
     case "employee":
       let employeeExists = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${input.firstName}" AND last_name = "${input.lastName}"`);
 
       if (employeeExists.length === 0) {
+
+        console.log(`post new employee = ${input.firstName}, ${input.lastName}, ${roleId}, ${managerId}`)
+
         db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${input.firstName}", "${input.lastName}", "${roleId}", "${managerId}")`);
       }
-
-      // db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${input.firstName}", "${input.lastName}", "${roleId}", "${managerId}")`);
-
-      //todo need manager id, need role id
-      //todo delete employee id, delete email
       break;
     default:
       let deptExists = await db.awaitQuery(`SELECT * FROM departments WHERE name = "${input.department}"`);
@@ -175,21 +197,3 @@ getWhatToDo();
 module.exports = {
   // getWhatToDo,
 };
-
-
-// console.log('FETCH PATH = ', `http://localhost:3001/${path}/${role}`);
-  // axios.get(`http://localhost:3001/${path}/${role}`)
-  // .then(function (response) {
-  // axios.get(`http://localhost:3001/api/roles/Lawyer`)
-  // .then(function (response) {    
-  //   // handle success
-  //   console.log('FETCH ROLE RESPONSE = ', response);
-  // })
-  // .catch(function (error) {
-  //   // handle error
-  //   console.log(error);
-  // })
-  // .then(function () {
-  //   console.log('FETCH ROLE LAST STEP = ', response);
-  //   // getWhatToDo();
-  // });
