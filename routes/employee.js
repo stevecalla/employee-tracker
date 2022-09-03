@@ -10,6 +10,12 @@ employees.route('/')
     db.query('SELECT * FROM employees', function (err, results) {
       res.send(results);
     })
-);
+  )
+  .post((req, res) => {
+    //post the input using an INSERT QUERY
+    // console.log('1 =', req);
+    // console.log('2 =', res.body);
+    res.send('hello');
+  })
 
 module.exports = employees;
