@@ -2,9 +2,9 @@ const express = require('express');
 const roles = express.Router();
 const { db } = require('../db/database');
 
-// route = /api/roles/
+// CURRENT ROUTE = /api/roles/
 
-// GET Route for roles
+// ROUTES FOR ROLES
 roles.route('/')
   .get((req, res) =>
     db.query('SELECT * FROM roles', function (err, results) {
