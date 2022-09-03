@@ -14,8 +14,11 @@ roles.route('/')
   .post((req, res) => {
     //post the input using an INSERT QUERY
     // console.log('1 =', req);
-    // console.log('2 =', res.body);
+    console.log('2 =', res.body);
     res.send('hello');
+
+    db.query(`INSERT INTO roles(title, salary, department_id) VALUES ("${req.body.role}", "${req.body.salary}", "${req.body.department_id}")`);
+
   })
 
   roles.get('/:role', async (req, res) =>{

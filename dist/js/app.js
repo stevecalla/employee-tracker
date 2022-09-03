@@ -113,11 +113,23 @@ postAllData = async (path, input, type, roleId, deptId, managerId) => {
 
   switch (type) {
     case "role":
+      //CHECK IF ROLE ALREADY EXISTS
       let roleExists = await fetchRoleId('api/roles', input.role, "employee");
 
+      // console.log('role exists = ', roleExists);
+
+      //IF DEPARTMENT DOES NOT EXIST THEN INSERT
       if (roleExists === 0) {
-        //todo move to put route
-        db.query(`INSERT INTO roles(title, salary, department_id) VALUES ("${input.role}", "${input.salary}", "${deptId}")`);
+        // console.log('bbbbb =', input.role, input.salary, deptId)
+
+        axios.post(`http://localhost:3001/api/roles`, {
+          role: input.role,
+          salary: input.salary,
+          department_id: deptId
+        })
+        .catch(function (error) {
+          // console.log(error);
+        });
       }
       break;
     case "employee":
@@ -130,15 +142,15 @@ postAllData = async (path, input, type, roleId, deptId, managerId) => {
       }
       break;
     default:
-      //CHECK TO SEE IF DEPARTMENT ALREADY EXISTS
+      //CHECK IF DEPARTMENT ALREADY EXISTS
       let deptExists = await fetchDepartmentId('api/departments', input.department, 'role');
 
-      console.log('dept exists = ', deptExists);
-      
+      // console.log('dept exists = ', deptExists);
+
       //IF DEPARTMENT DOES NOT EXIST THEN INSERT
       if (deptExists === 0) {
 
-        console.log('bbbbb =', input.department)
+        // console.log('bbbbb =', input.department)
 
         axios.post(`http://localhost:3001/api/departments`, {
           name: input.department,
