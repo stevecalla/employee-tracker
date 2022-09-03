@@ -7,8 +7,8 @@ const {
   questionsUpdateEmployeeRole,
 } = require("./questions");
 
-getUserChoice = () => {
-  const start = inquirer.prompt(questionsUserChoice);
+getUserChoice = async () => {
+  const start = await inquirer.prompt(questionsUserChoice);
   return start;
 };
 

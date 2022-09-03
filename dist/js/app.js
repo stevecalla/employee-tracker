@@ -55,12 +55,12 @@ getInfo = async (askQuestions, path, type) => {
   await askQuestions()
     .then((data) => input = data)
     // .then(() => console.log('INPUT = ', input))
-    // .then(() => fetchRoleId('api/employees', input.role, type))
-    // .then((id_1) => roleId = id_1)
-    // .then(() => fetchDepartmentId('api/departments', input.roleDepartment, type))
-    // .then((id_2) => deptId = id_2)
-    // .then(() => fetchManagerId('api/employees', input.employeeManager, type))
-    // .then((id_3) => managerId = id_3)
+    .then(() => fetchRoleId('api/employees', input.role, type))
+    .then((id_1) => roleId = id_1)
+    .then(() => fetchDepartmentId('api/departments', input.roleDepartment, type))
+    .then((id_2) => deptId = id_2)
+    .then(() => fetchManagerId('api/employees', input.employeeManager, type))
+    .then((id_3) => managerId = id_3)
     .then(() => postAllData(path, input, type, roleId, deptId, managerId))
     .then(() => renderInput(input, type))
     .then(() => getWhatToDo());
@@ -112,28 +112,36 @@ fetchRoleId = async (path, role, type) => {
   }
 }
 
-postAllData = (path, input, type, roleId, deptId, managerId) => {
-  // console.log('POST = ', input, 'TYPE =', type, 'ROLE ID = ', roleId,  'DEPT ID = ', deptId, 'MGR ID = ', managerId)
+postAllData = async (path, input, type, roleId, deptId, managerId) => {
+  console.log('POST = ', input, 'TYPE =', type, 'ROLE ID = ', roleId,  'DEPT ID = ', deptId, 'MGR ID = ', managerId);
+
   switch (type) {
     case "role":
-      db.query(`INSERT INTO roles(title, salary, department_id) VALUES ("${input.role}", "${input.salary}", "${deptId}")`, (err, rows, fields) => {
-        // if (err) {
-          // console.log(err)
-          // getWhatToDo();
-          // throw err
-        // }
-      
-        console.log('The solution is: ', rows[0].solution)
-      });
+      let roleExists = await db.awaitQuery(`SELECT * FROM roles WHERE title = "${input.role}"`);
+
+      if (roleExists.length === 0) {
+        db.query(`INSERT INTO roles(title, salary, department_id) VALUES ("${input.role}", "${input.salary}", "${deptId}")`);
+      }
       //todo add department from query
       break;
     case "employee":
-      db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${input.firstName}", "${input.lastName}", "${roleId}", "${managerId}")`);
+      let employeeExists = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${input.firstName}" AND last_name = "${input.lastName}"`);
+
+      if (employeeExists.length === 0) {
+        db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${input.firstName}", "${input.lastName}", "${roleId}", "${managerId}")`);
+      }
+
+      // db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${input.firstName}", "${input.lastName}", "${roleId}", "${managerId}")`);
+
       //todo need manager id, need role id
       //todo delete employee id, delete email
       break;
     default:
-      db.query(`INSERT INTO departments(name) VALUES ("${input.department}")`);
+      let deptExists = await db.awaitQuery(`SELECT * FROM departments WHERE name = "${input.department}"`);
+      
+      if (deptExists.length === 0) {
+        db.query(`INSERT INTO departments(name) VALUES ("${input.department}")`);
+      };
       break;
   }
 }
