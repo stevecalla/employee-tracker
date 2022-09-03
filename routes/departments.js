@@ -26,7 +26,11 @@ departments.route('/')
     // console.log('5 = ', result, result.length, result[0].id);
 
     console.log(result);
-    res.json(result[0].id);
+
+    result.length !== 0 ? result = result[0].id : result = 0;
+    res.json(result);
+
+    // res.json(result[0].id);
   })
 
 module.exports = departments;

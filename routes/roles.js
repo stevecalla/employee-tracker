@@ -22,8 +22,12 @@ roles.route('/')
     let title = req.params;
 
     let result = await db.awaitQuery(`SELECT id FROM roles WHERE title = "${title.role}"`);
-    // console.log('5 = ', result, result.length, result[0].id);
-    res.json(result[0].id);
+    console.log('5 = ', result, result.length);
+
+    result.length !== 0 ? result = result[0].id : result = 0;
+    res.json(result);
+
+    // res.json(result[0].id);
   })
 
 module.exports = roles;
