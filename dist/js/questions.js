@@ -1,5 +1,5 @@
 const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../lib/util");
-// const { connectDb } = require('../../database');
+const axios = require('axios');
 
 choicesStart = [
   "View All Employees", // todo:returns a table of employees
@@ -12,64 +12,23 @@ choicesStart = [
   "Quit",
 ];
 
-choicesDepartments = () => {
-  // let test = [];
-
-  // connectDb.promise().query("SELECT id, name FROM departments ORDER BY id;")
-  //   .then(([rows, fields]) => {
-  //     console.log(rows)
-  //     test = rows.map(element => element.name);
-  //     console.log('1 = ', test);
-  //     test2(test);
-  //   })
-  //   .catch(console.log)
-  //   .then( () => connectDb.end());
-
-  // console.log('2 = ', test);
-  // return test;
-  let departments = [
-    "Engineering",
-    "Finance",
-    "Legal",
-    "Sales",
-    "Service",
-    "Other",
-  ]
+choicesDepartments = async () => {
+  let departmentData = await axios.get(`http://localhost:3001/api/departments`);
+  let departments = departmentData.data.map(element => element.Department);
   return departments;
-  // return [
-  //   "Engineering",
-  //   "Finance",
-  //   "Legal",
-  //   "Sales",
-  //   "Service",
-  // ]
 }
 
-choicesRoles = [
-  "Sales Lead",  //sales
-  "Sales Person", //sales
-  "Lead Engineer", //engineering
-  "Software Engineer",  //engineering
-  "Account Manager", //finance
-  "Accountant", //finance
-  "Legal Team Lead", //legal
-  "Lawyer", //legal
-  "Customer Service Representative", //service
-  "Other", //to be updated later
-];
+choicesRoles = async () => {
+  let rolesData = await axios.get(`http://localhost:3001/api/roles`);
+  let roles = rolesData.data.map(element => element.Title);
+  return roles;
+}
 
-choicesEmployees = [
-  "Sue Eight",
-  "Zak Five",
-  "Doreen Four",
-  "Molly Nine",
-  "John One",
-  "Megan Seven",
-  "Emily Six",
-  "Molly Ten",
-  "Rita Three",
-  "Beth Two",
-];
+choicesEmployees = async () => {
+  let employeesData = await axios.get(`http://localhost:3001/api/employees`);
+  let employees = employeesData.data.map(element => `${element.First_Name} ${element.Last_Name}`);
+  return employees;
+}
 
 const questionsUserChoice = [
   {
