@@ -15,10 +15,18 @@ employees.route('/')
   .post((req, res) => {
     //post the input using an INSERT QUERY
     // console.log('1 =', req);
-    // console.log('2 =', req.body);
+    // console.log('post =', req.body);
     res.send('hello');
 
     db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${req.body.first_name}", "${req.body.last_name}", "${req.body.role_id}", "${req.body.manager_id}")`);
+  })
+  .put((req, res) => {
+    //post the input using an INSERT QUERY
+    // console.log('1 =', req);
+    console.log('put =', req.body);
+    res.send('hello');
+
+    db.query(`UPDATE employees SET role_id = ${req.body.role_id} WHERE id = ${req.body.id}`);
   })
 
   employees.get('/:manager', async (req, res) =>{

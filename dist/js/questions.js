@@ -196,7 +196,7 @@ const questionsUpdateEmployeeRole = [ // maps to Add Role
 {
   prefix: "⠋🟡 2 of 2)",
   type: "rawlist",
-  name: "newRole",
+  name: "role",
   message: `\u001b[0;1mSelect ${blue}new role${white}?`,
   choices: choicesRoles,
   default: "Manager",

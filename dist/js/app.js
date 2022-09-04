@@ -25,7 +25,8 @@ getWhatToDo = async () => {
           getInfo(getEmployee, 'api/employees', "employee");
           break;
         case "Update Employee Role":
-          getInfo(getUpdateEmployeeRole, "updateRole");
+          getInfo(getUpdateEmployeeRole,'api/employees', "updateRole");
+          // updateEmployeeRole();
           break;
         case "View All Roles":
           fetchAllData('api/roles', selection);
@@ -59,10 +60,21 @@ getInfo = async (askQuestions, path, type) => {
     .then((id_1) => roleId = id_1)
     .then(() => fetchDepartmentId('api/departments', input.roleDepartment, type))
     .then((id_2) => deptId = id_2)
-    .then(() => fetchManagerId('api/employees', input.employeeManager, type))
+    .then(() => type === "updateRole" ? fetchManagerId('api/employees', input.employee, type) : fetchManagerId('api/employees', input.employeeManager, type) )
     .then((id_3) => !id_3 ? managerId === undefined : managerId = id_3[0].id)
     .then(() => console.log('ask question manager id = ', managerId))
-    .then(() => postAllData(path, input, type, roleId, deptId, managerId))
+    .then(() => console.log(type, input, roleId, managerId, path))
+    .then(() => type === "updateRole" ? (
+      axios.put(`http://localhost:3001/${path}`, {
+        id: managerId,
+        role_id: roleId
+        })
+        .catch(function (error) {
+          // console.log(error);
+        })
+      ) 
+      : postAllData(path, input, type, roleId, deptId, managerId)
+      )
     .then(() => renderInput(input, type))
     .then(() => getWhatToDo());
 };
@@ -84,7 +96,7 @@ fetchManagerId = async (path, employeeManager, type) => {
   console.log('FETCH MGR = ', path, employeeManager, type);
   console.log('FETCH PATH = ', `http://localhost:3001/${path}/${employeeManager}`);
 
-  if (type === 'employee') {
+  if (type === 'employee' || type === 'updateRole') {
     let getEmployee = await axios.get(`http://localhost:3001/${path}/${employeeManager}`);
     // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
 
@@ -101,7 +113,7 @@ fetchRoleId = async (path, role, type) => {
   console.log('FETCH ROLE = ', path, role, type);
   console.log('FETCH PATH = ', `http://localhost:3001/${path}/${role}`);
 
-  if (type === 'employee') {
+  if (type === 'employee' || type === 'updateRole') {
     let roleId = await axios.get(`http://localhost:3001/${path}/${role}`);
     // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
     return roleId.data;
@@ -185,9 +197,12 @@ postAllData = async (path, input, type, roleId, deptId, managerId) => {
 //DETERMINE WHICH INPUT TO RENDER TO THE USER
 renderInput = (input, type) => {
   let inputToRender = "";
-  input.firstName ? inputToRender = `${input.firstName} ${input.lastName}` : input.department ? inputToRender = input.department : inputToRender = input.role
+  
+  input.firstName ? inputToRender = `${input.firstName} ${input.lastName}` : input.department ? inputToRender = input.department : inputToRender = input.role;
 
-  type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.newRole}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
+  console.log(input, type, input.role, input.employee, inputToRender);
+  
+  type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
 }
 
 fetchAllData = (path, selection) => {
