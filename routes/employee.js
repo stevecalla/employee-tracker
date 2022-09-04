@@ -66,6 +66,7 @@ employees.route('/')
     ON e.role_id = roles.id
     INNER JOIN departments
     ON roles.department_id = departments.id
+    ORDER BY e.id;
   `;
 
 module.exports = employees;

@@ -54,6 +54,7 @@ choicesRoles = [
   "Legal Team Lead", //legal
   "Lawyer", //legal
   "Customer Service Representative", //service
+  "Other", //to be updated later
 ];
 
 choicesEmployees = [

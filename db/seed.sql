@@ -8,7 +8,8 @@ VALUES  ("Engineering"),
         ("Finance"),
         ("Legal"),
         ("Sales"),
-        ("Service");
+        ("Service"),
+        ("Other");
 
 INSERT INTO roles (title, salary, department_id)
 VALUES  ("Sales Lead", "10000", 4),
@@ -19,7 +20,8 @@ VALUES  ("Sales Lead", "10000", 4),
         ("Accountant", "10000", 1),
         ("Legal Team Lead", "10000", 3),
         ("Lawyer", "10000", 3),
-        ("Customer Service Rep", "10000", 5);
+        ("Customer Service Rep", "10000", 5),
+        ("Other", "0", 6);
 
 INSERT INTO employees (first_name, last_name, role_id)
 VALUES  ("John", "One", 1),

@@ -42,7 +42,8 @@ departments.route('/')
     -- *,
       id AS Dept_ID,
       name AS Department
-    FROM departments;
+    FROM departments
+    ORDER BY id;
   `;
 
 module.exports = departments;

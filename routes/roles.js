@@ -43,7 +43,8 @@ roles.route('/')
       roles.salary AS Salary
     FROM roles
     INNER JOIN departments
-    ON roles.department_id = departments.id;
+    ON roles.department_id = departments.id
+    ORDER BY roles.id;
   `;
 
 module.exports = roles;
