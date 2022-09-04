@@ -33,6 +33,7 @@ choicesDepartments = () => {
     "Legal",
     "Sales",
     "Service",
+    "Other",
   ]
   return departments;
   // return [
