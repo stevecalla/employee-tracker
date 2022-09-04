@@ -7,7 +7,8 @@ const { db } = require('../db/database');
 // ROUTE FOR EMPLOYEES
 employees.route('/')
   .get((req, res) =>
-    db.query('SELECT * FROM employees', function (err, results) {
+    db.query(employeeTableSQL, function (err, results) {
+      // db.query('SELECT * FROM employees', function (err, results) {
       res.send(results);
     })
   )
@@ -41,6 +42,30 @@ employees.route('/')
     // res.json(result[0].manager_id);
   })
 
-
+  const employeeTableSQL = `
+    SELECT
+      e.id AS EMPLOYEE_ID,
+      e.first_name AS First_Name,
+      e.last_name AS Last_Name,
+      departments.name AS Department,
+      roles.title AS Title,
+      roles.salary AS Salary,
+      CONCAT(m.first_name, ' ', m.last_name) AS Manager
+    -- e.role_id AS e_role_id,
+    -- e.manager_id as e_manager_id,
+    -- m.id as m_id,
+    -- m.first_name,
+    -- m.last_name,
+    -- m.role_id,
+    -- m.manager_id,
+    -- departments.id AS dept_id
+    FROM employees AS e
+    LEFT JOIN employees AS m
+    ON e.manager_id = m.id
+    INNER JOIN roles
+    ON e.role_id = roles.id
+    INNER JOIN departments
+    ON roles.department_id = departments.id
+  `;
 
 module.exports = employees;

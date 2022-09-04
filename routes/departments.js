@@ -7,7 +7,8 @@ const { db } = require('../db/database');
 // ROUTES FOR DEPARTMENTS
 departments.route('/')
   .get((req, res) =>
-    db.query('SELECT * FROM departments', function (err, results) {
+    db.query(deptTableSQL, function (err, results) {
+    // db.query('SELECT * FROM departments', function (err, results) {
       res.send(results);
     })
   )
@@ -15,7 +16,6 @@ departments.route('/')
     //post the input using an INSERT QUERY
     // console.log('1 =', req);
     // console.log('2 =', req.body.name);
-    
     res.send('hello');
 
     db.query(`INSERT INTO departments(name) VALUES ("${req.body.name}")`);
@@ -24,7 +24,7 @@ departments.route('/')
 
   departments.get('/:department', async (req, res) =>{
     let department = req.params;
-    console.log(department);
+    // console.log(department);
 
     let result = await db.awaitQuery(`SELECT id FROM departments WHERE name = "${req.params.department}"`);
     // console.log('5 = ', result, result.length, result[0].id);
@@ -35,6 +35,14 @@ departments.route('/')
     res.json(result);
 
     // res.json(result[0].id);
-  })
+  });
+
+  const deptTableSQL = `
+    SELECT
+    -- *,
+      id AS Dept_ID,
+      name AS Department
+    FROM departments;
+  `;
 
 module.exports = departments;
