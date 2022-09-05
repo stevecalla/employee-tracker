@@ -46,6 +46,9 @@ getWhatToDo = async () => {
         case "View Employees by Department":
           fetchEmployeeBySegmentData('api/employees', selection, "Department");
           break;
+        case "View Department by Salary":
+          fetchEmployeeBySegmentData('api/employees', selection, "Department");
+          break;
         default:
           console.log(selection)
           // process.exit();

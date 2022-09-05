@@ -39,11 +39,13 @@ employees.route('/')
     let result = {};
 
     if (req.params.manager === "View Employees by Manager") {
-      result = await db.awaitQuery(employeeByManagerSQL);
+        result = await db.awaitQuery(employeeByManagerSQL);
     } else if (req.params.manager === "View Employees by Department") {
-      result = await db.awaitQuery(employeeByDepartmentSQL);
+        result = await db.awaitQuery(employeeByDepartmentSQL);
+    } else if (req.params.manager === "View Department by Salary") {
+        result = await db.awaitQuery(departmentBySalarySQL);
     } else {
-      result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
+        result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
     }
 
     // let result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
@@ -109,6 +111,23 @@ employees.route('/')
     LEFT JOIN departments AS d
     ON r.department_id = d.id
     ORDER BY department, e.last_name;
+  `;
+
+  const departmentBySalarySQL = `
+    SELECT
+      departments.id AS Department_ID,
+      departments.name as Department,
+      sum(r.salary) AS Salary_Total,
+      count(e.id) AS Employee_Count
+    FROM employees AS e
+    LEFT JOIN employees AS m
+    ON e.manager_id = m.id
+    INNER JOIN roles AS r
+    ON e.role_id = r.id
+    INNER JOIN departments
+    ON r.department_id = departments.id
+    GROUP BY departments.id
+    ORDER BY departments.id
   `;
 
 module.exports = employees;
