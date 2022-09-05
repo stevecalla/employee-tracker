@@ -30,19 +30,31 @@ employees.route('/')
   })
 
   employees.get('/:manager', async (req, res) =>{
-    let manager = req.params;
+    // let manager = req.params;
+    console.log('req.params = ', req.params);
     // console.log('2 = ', manager);
 
     let firstName = req.params.manager.split(' ')[0];
     let lastName = req.params.manager.split(' ')[1];
+    let result = {};
 
-    let result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
+    if (req.params.manager === "View Employees by Manager") {
+      result = await db.awaitQuery(employeeByManagerSQL);
+    } else if (req.params.manager === "View Employees by Department") {
+      result = await db.awaitQuery(employeeByDepartmentSQL);
+    } else {
+      result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
+    }
+
+    // let result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
 
     // console.log(result);
     // console.log('5 = ', result, result.length, result[0].id);
 
     // result.length !== 0 ? result = result[0].manager_id : result = 0;
     // res.json(result);
+
+    console.log(result)
 
     result.length !== 0 ? result = result : result = 0;
     res.json(result);
@@ -52,7 +64,7 @@ employees.route('/')
 
   const employeeTableSQL = `
     SELECT
-      e.id AS EMPLOYEE_ID,
+      e.id AS Employee_ID,
       e.first_name AS First_Name,
       e.last_name AS Last_Name,
       departments.name AS Department,
@@ -75,6 +87,28 @@ employees.route('/')
     INNER JOIN departments
     ON roles.department_id = departments.id
     ORDER BY e.id;
+  `;
+
+  const employeeByManagerSQL = `
+    SELECT
+      CONCAT(m.first_name, ' ', m.last_name) AS Manager,
+      CONCAT(e.first_name, ' ', e.last_name) AS Employee
+    FROM employees AS e
+    LEFT JOIN employees AS m
+    ON e.manager_id = m.id
+    ORDER BY m.last_name, e.last_name;
+  `;
+
+  const employeeByDepartmentSQL = `
+    SELECT
+      d.name AS Department,
+      CONCAT(e.first_name, ' ', e.last_name) AS Employee
+    FROM employees AS e
+    LEFT JOIN roles AS r
+    ON e.role_id = r.id
+    LEFT JOIN departments AS d
+    ON r.department_id = d.id
+    ORDER BY department, e.last_name;
   `;
 
 module.exports = employees;

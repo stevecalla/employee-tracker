@@ -2,13 +2,22 @@ const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, w
 const axios = require('axios');
 
 choicesStart = [
-  "View All Employees", // todo:returns a table of employees
+  "View All Employees",
   "Add Employee", // see questionsAddEmployee
   "Update Employee Role", // see questionsUpdateEmployee Role
-  "View All Roles", // todo:returns a table of role
-  "Add Role", // see questionsAddRole; //todo:need to update roles choice list with new role
-  "View All Departments", // todo:returns a table of departments
+  "View All Roles",
+  "Add Role", // see questionsAddRole
+  "View All Departments",
   "Add Department", // see questionsAddDepartment
+  
+  "View Employees by Manager", //todo:DONE
+  "View Employees by Department", //todo:DONE
+
+  "View Department by Salary", //todo
+  "Delete Role", //todo
+  "Delete Manager", //todo
+  "Delete Department", //todo
+  "Update Employee Manager", //todo
   "Quit",
 ];
 

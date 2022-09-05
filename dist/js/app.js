@@ -40,6 +40,12 @@ getWhatToDo = async () => {
         case "Add Department":
           getInfo(getDepartment, 'api/departments', "department");
           break;
+        case "View Employees by Manager":
+          fetchEmployeeBySegmentData('api/employees', selection, "Manager");
+          break;
+        case "View Employees by Department":
+          fetchEmployeeBySegmentData('api/employees', selection, "Department");
+          break;
         default:
           console.log(selection)
           // process.exit();
@@ -203,6 +209,64 @@ renderInput = (input, type) => {
   console.log(input, type, input.role, input.employee, inputToRender);
   
   type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
+}
+
+//RENDER EMPLOYEE BY MANAGER OR EMPLOYEE BY DEPARTMENT
+fetchEmployeeBySegmentData = async (path, selection, listName) => {
+  let finalList = await axios.get(`http://localhost:3001/${path}/${selection}`);
+  // console.log(finalList.data);
+  finalList = finalList.data;
+  await tableOutput(finalList, selection);
+  getWhatToDo();
+
+  // axios.get(`http://localhost:3001/${path}`)
+  // .then(function (response) {
+  //   // console.log(response.data);
+  //   let listNameLowerCase = listName.toLowerCase();
+  //   console.log("list name = ", listName, listNameLowerCase);
+
+  //   let employeeByManger = response.data.map(element => (
+  //     {
+  //       sortKey: listName === "Department" ? element.Department: element.Manager.split(' ')[1],
+  //       [listNameLowerCase]: listName === "Department" ? element.Department: element.Manager, 
+  //       employee: `${element.First_Name} ${element.Last_Name}`
+  //     })
+  //   );
+  //   console.log(employeeByManger);
+  //   let sortManager = sortUtility(employeeByManger, "managerLastName");
+  //   console.log(sortManager);
+  //   let finalList = sortManager.map(element => (
+  //     {
+  //       [listName]: listName === "Department" ? element.department: element.manager,
+  //       Employee: element.employee
+  //     }
+  //   ))
+  //   tableOutput(finalList, selection);
+  // })
+  // .catch(function (error) {
+  //   // handle error
+  //   console.log(error);
+  // })
+  // .then(function () {
+  //   getWhatToDo();
+  // });
+}
+
+//UTILITY FUNCTIONS
+function sortUtility(listToSort) {
+  let sortedList = listToSort.sort(function (a, b) {
+    const nameA = a.sortKey.toUpperCase(); //ignore upper and lowercase
+    const nameB = b.sortKey.toUpperCase(); //ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    //names must be equal
+    return 0;
+  });
+  return sortedList;
 }
 
 fetchAllData = (path, selection) => {
