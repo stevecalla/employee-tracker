@@ -15,8 +15,8 @@ choicesStart = [
 
   "View Department by Salary", //todo
   "Delete Role", //todo
-  "Delete Manager", //todo
   "Delete Department", //todo
+  "Delete Employee", //todo
   "Update Employee Manager", //todo
   "Quit",
 ];
@@ -193,25 +193,79 @@ const questionsAddEmployee = [
 ];
 
 const questionsUpdateEmployeeRole = [ // maps to Add Role
-{
-  prefix: "⠋🟡 1 of 2)",
-  type: "rawlist",
-  name: "employee",
-  message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
-  choices: choicesEmployees,
-  // default: "Manager",
-  suffix: " 🟡",
-},
-{
-  prefix: "⠋🟡 2 of 2)",
-  type: "rawlist",
-  name: "role",
-  message: `\u001b[0;1mSelect ${blue}new role${white}?`,
-  choices: choicesRoles,
-  default: "Manager",
-  suffix: " 🟡",
-},
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "employee",
+    message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
+    choices: choicesEmployees,
+    // default: "Manager",
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "rawlist",
+    name: "role",
+    message: `\u001b[0;1mSelect ${blue}new role${white}?`,
+    choices: choicesRoles,
+    default: "Manager",
+    suffix: " 🟡",
+  },
 ];
+
+const questionsDeleteRole = [ // maps to Delete Role
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "role",
+    message: `\u001b[0;1mSelect ${blue}role${white} to delete?`,
+    choices: choicesRoles,
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "confirm",
+    name: "confirm",
+    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.role}${white}?`,
+    suffix: " 🟡",
+  },
+];
+
+const questionsDeleteDepartment = [ // maps to Delete Role
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "department",
+    message: `\u001b[0;1mSelect ${blue}department${white} to delete?`,
+    choices: choicesDepartments,
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "confirm",
+    name: "confirm",
+    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.department}${white}?`,
+    suffix: " 🟡",
+  },
+];
+
+const questionsDeleteEmployee = [ // maps to Delete Role
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "employee",
+    message: `\u001b[0;1mSelect ${blue}employee${white} to delete?`,
+    choices: choicesEmployees,
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "confirm",
+    name: "confirm",
+    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.employee}${white}?`,
+    suffix: " 🟡",
+  },
+]
 
 module.exports = {
   questionsUserChoice,
@@ -219,4 +273,7 @@ module.exports = {
   questionsAddRole,
   questionsAddEmployee,
   questionsUpdateEmployeeRole,
+  questionsDeleteRole,
+  questionsDeleteDepartment,
+  questionsDeleteEmployee,
 };

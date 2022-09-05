@@ -19,7 +19,14 @@ departments.route('/')
     res.send('hello');
 
     db.query(`INSERT INTO departments(name) VALUES ("${req.body.name}")`);
+  })
+  .delete((req, res) => {
+    //post the input using an INSERT QUERY
+    console.log('1 delete dept =', req);
+    console.log('2 delete dept =', req.body, req.body.name);
+    res.send('hello');
 
+    db.query(`DELETE FROM departments WHERE name = "${req.body.name}"`);
   })
 
   departments.get('/:department', async (req, res) =>{

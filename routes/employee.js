@@ -28,6 +28,19 @@ employees.route('/')
 
     db.query(`UPDATE employees SET role_id = ${req.body.role_id} WHERE id = ${req.body.id}`);
   })
+  .delete((req, res) => {
+    //post the input using an INSERT QUERY
+    console.log('1 delete emp =', req);
+    console.log('2 delete emp =', req.body, req.body.employee);
+    res.send('hello');
+
+    let firstName = req.body.employee.split(' ')[0];
+    let lastName = req.body.employee.split(' ')[1];
+    console.log('a = ', firstName, 'b = ', lastName);
+
+    db.query(`DELETE FROM employees WHERE first_name = "${firstName}" and last_name = "${lastName}"`);
+
+  })
 
   employees.get('/:manager', async (req, res) =>{
     // let manager = req.params;

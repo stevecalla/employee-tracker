@@ -4,6 +4,10 @@ const {
   getRole,
   getEmployee,
   getUpdateEmployeeRole,
+  getDeleteRole,
+  getDeleteDepartment,
+  getDeleteEmployee
+
 } = require("./runInquirer");
 const { banner } = require("./banner");
 const { blue, white } = require("../../lib/util");
@@ -49,11 +53,69 @@ getWhatToDo = async () => {
         case "View Department by Salary":
           fetchEmployeeBySegmentData('api/employees', selection, "Department");
           break;
+        case "Delete Role":
+          deleteRole('api/roles', "delete");
+          break;
+        case "Delete Department":
+          deleteDepartment('api/departments', "delete");
+          break;
+        case "Delete Employee":
+          deleteEmployee('api/employees', "delete");
+          break;
         default:
           console.log(selection)
           // process.exit();
     }});
 };
+
+deleteEmployee = async (path, type) => {
+  await getDeleteEmployee()
+    .then((data) => input = data)
+    .then(() => console.log(input, input.confirm, input.employee))
+    .then(() => {if (input.confirm) {
+      axios.delete(`http://localhost:3001/${path}`, {
+        data: { employee: input.employee }
+        })
+        .catch(function (error) {
+          // console.log(error);
+        })
+    }})
+    .then(() => renderInput(input.employee, type))
+    .then(() => getWhatToDo())
+}
+
+deleteDepartment = async (path, type) => {
+  await getDeleteDepartment()
+    .then((data) => input = data)
+    // .then(() => console.log(input, input.confirm, input.department))
+    .then(() => {if (input.confirm) {
+      axios.delete(`http://localhost:3001/${path}`, {
+        data: { name: input.department }
+        })
+        .catch(function (error) {
+          // console.log(error);
+        })
+    }})
+    .then(() => renderInput(input.department, type))
+    .then(() => getWhatToDo())
+}
+
+deleteRole = async (path, type) => {
+  await getDeleteRole()
+    // .then(() => console.log(data.confirm, data.role))
+    .then((data) => input = data)
+    // .then(() => console.log(input, input.confirm, input.role))
+    .then(() => {if (input.confirm) {
+      axios.delete(`http://localhost:3001/${path}`, {
+        data: { title: input.role }
+        })
+        .catch(function (error) {
+          // console.log(error);
+        })
+    }})
+    .then(() => renderInput(input.role, type))
+    .then(() => getWhatToDo())
+}
 
 // ASK USER TO INPUT EMPLOYEE, ROLE, DEPARTMENT OR ROLE UPDATE; PASS IN ASKQUESTION FUNCTION, TYPE OF QUESTION. RETURN TO THE GETWHATTODO FUNCTION
 getInfo = async (askQuestions, path, type) => {
@@ -211,7 +273,7 @@ renderInput = (input, type) => {
 
   console.log(input, type, input.role, input.employee, inputToRender);
   
-  type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
+  type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : type === "delete" ? console.log(`\n${blue}Deleted ${input}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
 }
 
 //RENDER EMPLOYEE BY MANAGER OR EMPLOYEE BY DEPARTMENT
