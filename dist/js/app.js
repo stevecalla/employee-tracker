@@ -4,6 +4,7 @@ const {
   getRole,
   getEmployee,
   getUpdateEmployeeRole,
+  getUpdateEmployeeManager,
   getDeleteRoleDeptEmp,
 
 } = require("./runInquirer");
@@ -28,6 +29,10 @@ getWhatToDo = async () => {
           break;
         case "Update Employee Role":
           getInfo(getUpdateEmployeeRole,'api/employees', "updateRole");
+          // updateEmployeeRole();
+          break;
+        case "Update Employee Manager":
+          getInfo(getUpdateEmployeeManager,'api/employees', "updateManager");
           // updateEmployeeRole();
           break;
         case "View All Roles":
@@ -66,24 +71,6 @@ getWhatToDo = async () => {
     }});
 };
 
-deleteRoleDeptEmp = async (path, type, list) => {
-  await getDeleteRoleDeptEmp(list)
-    .then((data) => input = data)
-    // .then(() => console.log(input, input.confirm, input[list]))
-    .then(() => {if (input.confirm) {
-      axios.delete(`http://localhost:3001/${path}`, {
-        // data: { name: input.department }
-        data: { [list]: input[list] }
-        })
-        .catch(function (error) {
-          // console.log(error);
-        })
-    }})
-    // .then(() => renderInput(input.department, type))
-    .then(() => renderInput(input[list], type))
-    .then(() => getWhatToDo())
-}
-
 // ASK USER TO INPUT EMPLOYEE, ROLE, DEPARTMENT OR ROLE UPDATE; PASS IN ASKQUESTION FUNCTION, TYPE OF QUESTION. RETURN TO THE GETWHATTODO FUNCTION
 getInfo = async (askQuestions, path, type) => {
   let input = {};
@@ -101,7 +88,7 @@ getInfo = async (askQuestions, path, type) => {
     .then(() => type === "updateRole" ? fetchManagerId('api/employees', input.employee, type) : fetchManagerId('api/employees', input.employeeManager, type) )
     .then((id_3) => !id_3 ? managerId === undefined : managerId = id_3[0].id)
     .then(() => console.log('ask question manager id = ', managerId))
-    .then(() => console.log(type, input, roleId, managerId, path))
+    .then(() => console.log('1 = ', type, input, '3 = ', roleId, '3a = ', managerId, '4 = ', path))
     .then(() => type === "updateRole" ? (
       axios.put(`http://localhost:3001/${path}`, {
         id: managerId,
@@ -111,7 +98,15 @@ getInfo = async (askQuestions, path, type) => {
           // console.log(error);
         })
       ) 
-      : postAllData(path, input, type, roleId, deptId, managerId)
+      : type === "updateManager" ? (
+        axios.put(`http://localhost:3001/${path}`, {
+          employee: input.employee,
+          manager_id: managerId
+          })
+          .catch(function (error) {
+            // console.log(error);
+          })
+      ) : postAllData(path, input, type, roleId, deptId, managerId)
       )
     .then(() => renderInput(input, type))
     .then(() => getWhatToDo());
@@ -134,7 +129,7 @@ fetchManagerId = async (path, employeeManager, type) => {
   console.log('FETCH MGR = ', path, employeeManager, type);
   console.log('FETCH PATH = ', `http://localhost:3001/${path}/${employeeManager}`);
 
-  if (type === 'employee' || type === 'updateRole') {
+  if (type === 'employee' || type === 'updateRole' || type === 'updateManager') {
     let getEmployee = await axios.get(`http://localhost:3001/${path}/${employeeManager}`);
     // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
 
@@ -323,6 +318,24 @@ tableOutput = (data = seedData, selection = "Hello") => {
   console.table(data);
   console.log(`${blue}${title}${white}`);
 };
+
+deleteRoleDeptEmp = async (path, type, list) => {
+  await getDeleteRoleDeptEmp(list)
+    .then((data) => input = data)
+    // .then(() => console.log(input, input.confirm, input[list]))
+    .then(() => {if (input.confirm) {
+      axios.delete(`http://localhost:3001/${path}`, {
+        // data: { name: input.department }
+        data: { [list]: input[list] }
+        })
+        .catch(function (error) {
+          // console.log(error);
+        })
+    }})
+    // .then(() => renderInput(input.department, type))
+    .then(() => renderInput(input[list], type))
+    .then(() => getWhatToDo())
+}
 
 // console.log(banner);
 getWhatToDo();

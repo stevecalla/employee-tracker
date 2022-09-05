@@ -26,12 +26,23 @@ employees.route('/')
     console.log('put =', req.body);
     res.send('hello');
 
-    db.query(`UPDATE employees SET role_id = ${req.body.role_id} WHERE id = ${req.body.id}`);
+    
+    if (req.body.role_id) {
+      db.query(`UPDATE employees SET role_id = ${req.body.role_id} WHERE id = ${req.body.id}`);
+    } else {
+      let firstName = req.body.employee.split(' ')[0];
+      let lastName = req.body.employee.split(' ')[1];
+      
+      db.query(`UPDATE employees SET manager_id = ${req.body.manager_id} WHERE first_name = "${firstName}" and last_name = "${lastName}"`);
+    }
+
+
+
   })
   .delete((req, res) => {
     //post the input using an INSERT QUERY
-    console.log('1 delete emp =', req);
-    console.log('2 delete emp =', req.body, req.body.employee);
+    // console.log('1 delete emp =', req);
+    // console.log('2 delete emp =', req.body, req.body.employee);
     res.send('hello');
 
     let firstName = req.body.employee.split(' ')[0];
@@ -44,7 +55,7 @@ employees.route('/')
 
   employees.get('/:manager', async (req, res) =>{
     // let manager = req.params;
-    console.log('req.params = ', req.params);
+    // console.log('req.params = ', req.params);
     // console.log('2 = ', manager);
 
     let firstName = req.params.manager.split(' ')[0];
@@ -69,7 +80,7 @@ employees.route('/')
     // result.length !== 0 ? result = result[0].manager_id : result = 0;
     // res.json(result);
 
-    console.log(result)
+    // console.log(result)
 
     result.length !== 0 ? result = result : result = 0;
     res.json(result);

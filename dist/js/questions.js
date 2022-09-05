@@ -5,6 +5,9 @@ choicesStart = [
   "View All Employees",
   "Add Employee", // see questionsAddEmployee
   "Update Employee Role", // see questionsUpdateEmployee Role
+
+  "Update Employee Manager", //todo
+  
   "View All Roles",
   "Add Role", // see questionsAddRole
   "View All Departments",
@@ -15,8 +18,6 @@ choicesStart = [
   "Delete Role", //todo:DONE
   "Delete Department", //todo:DONE
   "Delete Employee", //todo:DONE
-
-  "Update Employee Manager", //todo
   "Quit",
 ];
 
@@ -157,14 +158,7 @@ const questionsAddEmployee = [
     name: "employeeManager",
     message: `${white}Enter the ${blue}employee's manager${white}?`,
     choices: choicesEmployees,
-    // default: "Joanne Smith",
     suffix: " 🟡",
-    // validate(answer) {
-    //   return isBlank(answer, "the role");
-    // },
-    // filter(answer) {
-    //   return capitalizeFirstCharacter(answer);
-    // },
   },
   // {
   //   prefix: "⠋🟡 5 of 6)",
@@ -208,6 +202,26 @@ const questionsUpdateEmployeeRole = [ // maps to Add Role
     message: `\u001b[0;1mSelect ${blue}new role${white}?`,
     choices: choicesRoles,
     default: "Manager",
+    suffix: " 🟡",
+  },
+];
+
+const questionsUpdateEmployeeManager = [ // maps to Add Role
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "employee",
+    message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
+    choices: choicesEmployees,
+    // default: "Manager",
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "rawlist",
+    name: "employeeManager",
+    message: `${white}Enter the ${blue}employee's manager${white}?`,
+    choices: choicesEmployees,
     suffix: " 🟡",
   },
 ];
@@ -272,6 +286,7 @@ module.exports = {
   questionsAddRole,
   questionsAddEmployee,
   questionsUpdateEmployeeRole,
+  questionsUpdateEmployeeManager,
   questionsDeleteRole,
   questionsDeleteDepartment,
   questionsDeleteEmployee,
