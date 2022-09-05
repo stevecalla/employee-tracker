@@ -4,9 +4,7 @@ const {
   getRole,
   getEmployee,
   getUpdateEmployeeRole,
-  getDeleteRole,
-  getDeleteDepartment,
-  getDeleteEmployee
+  getDeleteRoleDeptEmp,
 
 } = require("./runInquirer");
 const { banner } = require("./banner");
@@ -69,7 +67,7 @@ getWhatToDo = async () => {
 };
 
 deleteRoleDeptEmp = async (path, type, list) => {
-  await getDeleteDepartment(list)
+  await getDeleteRoleDeptEmp(list)
     .then((data) => input = data)
     // .then(() => console.log(input, input.confirm, input[list]))
     .then(() => {if (input.confirm) {

@@ -9,14 +9,13 @@ choicesStart = [
   "Add Role", // see questionsAddRole
   "View All Departments",
   "Add Department", // see questionsAddDepartment
-  
   "View Employees by Manager", //todo:DONE
   "View Employees by Department", //todo:DONE
-
   "View Department by Salary", //todo
-  "Delete Role", //todo
-  "Delete Department", //todo
-  "Delete Employee", //todo
+  "Delete Role", //todo:DONE
+  "Delete Department", //todo:DONE
+  "Delete Employee", //todo:DONE
+
   "Update Employee Manager", //todo
   "Quit",
 ];
