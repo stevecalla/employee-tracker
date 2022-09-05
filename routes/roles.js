@@ -23,10 +23,11 @@ roles.route('/')
   .delete((req, res) => {
     //post the input using an INSERT QUERY
     console.log('1 delete role =', req);
-    console.log('2 delete role =', req.body, req.body.title);
+    console.log('2 delete role =', req.body, req.body.role);
     res.send('hello');
 
-    db.query(`DELETE FROM roles WHERE title = "${req.body.title}"`);
+    // db.query(`DELETE FROM roles WHERE title = "${req.body.title}"`);
+    db.query(`DELETE FROM roles WHERE title = "${req.body.role}"`);
   })
 
   roles.get('/:role', async (req, res) =>{

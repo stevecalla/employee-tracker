@@ -23,10 +23,11 @@ departments.route('/')
   .delete((req, res) => {
     //post the input using an INSERT QUERY
     console.log('1 delete dept =', req);
-    console.log('2 delete dept =', req.body, req.body.name);
+    console.log('2 delete dept =', req.body, req.body.department);
     res.send('hello');
 
-    db.query(`DELETE FROM departments WHERE name = "${req.body.name}"`);
+    // db.query(`DELETE FROM departments WHERE name = "${req.body.name}"`);
+    db.query(`DELETE FROM departments WHERE name = "${req.body.department}"`);
   })
 
   departments.get('/:department', async (req, res) =>{

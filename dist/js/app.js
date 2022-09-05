@@ -54,13 +54,13 @@ getWhatToDo = async () => {
           fetchEmployeeBySegmentData('api/employees', selection, "Department");
           break;
         case "Delete Role":
-          deleteRole('api/roles', "delete");
+          deleteRoleDeptEmp('api/roles', "delete", "role");
           break;
         case "Delete Department":
-          deleteDepartment('api/departments', "delete");
+          deleteRoleDeptEmp('api/departments', "delete", "department");
           break;
         case "Delete Employee":
-          deleteEmployee('api/employees', "delete");
+          deleteRoleDeptEmp('api/employees', "delete", "employee");
           break;
         default:
           console.log(selection)
@@ -68,52 +68,21 @@ getWhatToDo = async () => {
     }});
 };
 
-deleteEmployee = async (path, type) => {
-  await getDeleteEmployee()
+deleteRoleDeptEmp = async (path, type, list) => {
+  await getDeleteDepartment(list)
     .then((data) => input = data)
-    .then(() => console.log(input, input.confirm, input.employee))
+    // .then(() => console.log(input, input.confirm, input[list]))
     .then(() => {if (input.confirm) {
       axios.delete(`http://localhost:3001/${path}`, {
-        data: { employee: input.employee }
+        // data: { name: input.department }
+        data: { [list]: input[list] }
         })
         .catch(function (error) {
           // console.log(error);
         })
     }})
-    .then(() => renderInput(input.employee, type))
-    .then(() => getWhatToDo())
-}
-
-deleteDepartment = async (path, type) => {
-  await getDeleteDepartment()
-    .then((data) => input = data)
-    // .then(() => console.log(input, input.confirm, input.department))
-    .then(() => {if (input.confirm) {
-      axios.delete(`http://localhost:3001/${path}`, {
-        data: { name: input.department }
-        })
-        .catch(function (error) {
-          // console.log(error);
-        })
-    }})
-    .then(() => renderInput(input.department, type))
-    .then(() => getWhatToDo())
-}
-
-deleteRole = async (path, type) => {
-  await getDeleteRole()
-    // .then(() => console.log(data.confirm, data.role))
-    .then((data) => input = data)
-    // .then(() => console.log(input, input.confirm, input.role))
-    .then(() => {if (input.confirm) {
-      axios.delete(`http://localhost:3001/${path}`, {
-        data: { title: input.role }
-        })
-        .catch(function (error) {
-          // console.log(error);
-        })
-    }})
-    .then(() => renderInput(input.role, type))
+    // .then(() => renderInput(input.department, type))
+    .then(() => renderInput(input[list], type))
     .then(() => getWhatToDo())
 }
 
