@@ -1,6 +1,9 @@
 const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../lib/util");
 const axios = require('axios');
 const inquirer = require("inquirer");
+const Departments = require('../../lib/Departments');
+const Roles = require('../../lib/Roles');
+const Employees = require('../../lib/Employees');
 
 choicesStart = [
   new inquirer.Separator(`-- Employees --`),
@@ -30,19 +33,22 @@ choicesStart = [
 ];
 
 choicesDepartments = async () => {
-  let departmentData = await axios.get(`http://localhost:3001/api/departments`);
-  let departments = departmentData.data.map(element => element.Department);
+  let viewDepartmentsList = new Departments();
+  let deparmentsData = await viewDepartmentsList.fetchDepartmentsList('api/departments');
+  let departments = deparmentsData.data.map(element => element.Department);
   return departments;
 }
 
 choicesRoles = async () => {
-  let rolesData = await axios.get(`http://localhost:3001/api/roles`);
+  let viewRolesList = new Roles();
+  let rolesData = await viewRolesList.fetchRolesList('api/roles');
   let roles = rolesData.data.map(element => element.Title);
   return roles;
 }
 
 choicesEmployees = async () => {
-  let employeesData = await axios.get(`http://localhost:3001/api/employees`);
+  let viewEmployeesList = new Employees();
+  let employeesData = await viewEmployeesList.fetchEmployeesList('api/employees');
   let employees = employeesData.data.map(element => `${element.First_Name} ${element.Last_Name}`);
   return employees;
 }
