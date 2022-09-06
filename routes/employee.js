@@ -32,7 +32,7 @@ employees.route('/')
     } else {
       let firstName = req.body.employee.split(' ')[0];
       let lastName = req.body.employee.split(' ')[1];
-      
+
       db.query(`UPDATE employees SET manager_id = ${req.body.manager_id} WHERE first_name = "${firstName}" and last_name = "${lastName}"`);
     }
 
@@ -53,6 +53,9 @@ employees.route('/')
 
   })
 
+  // /TBD/TBD
+  // /api/employees/view employees by manager
+  
   employees.get('/:manager', async (req, res) =>{
     // let manager = req.params;
     // console.log('req.params = ', req.params);
