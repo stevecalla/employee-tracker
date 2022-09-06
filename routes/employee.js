@@ -53,37 +53,29 @@ employees.route('/')
 
   })
 
-  // /TBD/TBD
-  // /api/employees/view employees by manager
-  
-  employees.get('/:manager', async (req, res) =>{
-    // let manager = req.params;
-    // console.log('req.params = ', req.params);
-    // console.log('2 = ', manager);
+  employees.get('/viewbymanager', async (req, res) => {
+    console.log('req.params 23 = ', req.params);
+
+    let result = await db.awaitQuery(employeeByManagerSQL);
+
+    res.json(result);
+  });
+
+  employees.get('/viewbydepartment', async (req, res) => {
+    console.log('req.params 24 = ', req.params);
+
+    let result = await db.awaitQuery(employeeByDepartmentSQL);
+    
+    res.json(result);
+  });
+
+  employees.get('/:manager', async (req, res) => {
+    console.log('req.params 22 = ', req.params);
 
     let firstName = req.params.manager.split(' ')[0];
     let lastName = req.params.manager.split(' ')[1];
-    let result = {};
 
-    if (req.params.manager === "View Employees by Manager") {
-        result = await db.awaitQuery(employeeByManagerSQL);
-    } else if (req.params.manager === "View Employees by Department") {
-        result = await db.awaitQuery(employeeByDepartmentSQL);
-    } else if (req.params.manager === "View Department by Salary") {
-        result = await db.awaitQuery(departmentBySalarySQL);
-    } else {
-        result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
-    }
-
-    // let result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
-
-    // console.log(result);
-    // console.log('5 = ', result, result.length, result[0].id);
-
-    // result.length !== 0 ? result = result[0].manager_id : result = 0;
-    // res.json(result);
-
-    // console.log(result)
+    let result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
 
     result.length !== 0 ? result = result : result = 0;
     res.json(result);
@@ -138,23 +130,6 @@ employees.route('/')
     LEFT JOIN departments AS d
     ON r.department_id = d.id
     ORDER BY department, e.last_name;
-  `;
-
-  const departmentBySalarySQL = `
-    SELECT
-      departments.id AS Department_ID,
-      departments.name as Department,
-      sum(r.salary) AS Salary_Total,
-      count(e.id) AS Employee_Count
-    FROM employees AS e
-    LEFT JOIN employees AS m
-    ON e.manager_id = m.id
-    INNER JOIN roles AS r
-    ON e.role_id = r.id
-    INNER JOIN departments
-    ON r.department_id = departments.id
-    GROUP BY departments.id
-    ORDER BY departments.id
   `;
 
 module.exports = employees;

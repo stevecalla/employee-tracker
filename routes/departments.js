@@ -30,6 +30,14 @@ departments.route('/')
     db.query(`DELETE FROM departments WHERE name = "${req.body.department}"`);
   })
 
+  departments.get('/viewdeptbysalary', async (req, res) => {
+    console.log('req.params 25 = ', req.params);
+    
+    let result = await db.awaitQuery(departmentBySalarySQL);
+    
+    res.json(result);
+  });
+
   departments.get('/:department', async (req, res) =>{
     let department = req.params;
     // console.log(department);
@@ -52,6 +60,23 @@ departments.route('/')
       name AS Department
     FROM departments
     ORDER BY id;
+  `;
+
+  const departmentBySalarySQL = `
+    SELECT
+      departments.id AS Department_ID,
+      departments.name as Department,
+      sum(r.salary) AS Salary_Total,
+      count(e.id) AS Employee_Count
+    FROM employees AS e
+    LEFT JOIN employees AS m
+    ON e.manager_id = m.id
+    INNER JOIN roles AS r
+    ON e.role_id = r.id
+    INNER JOIN departments
+    ON r.department_id = departments.id
+    GROUP BY departments.id
+    ORDER BY departments.id
   `;
 
 module.exports = departments;
