@@ -11,7 +11,6 @@ const {
 const { banner } = require("./banner");
 const { blue, white } = require("../../lib/util");
 const consoleTable = require('console.table');
-const { seedData } = require('../../db/testData');
 const axios = require('axios');
 const { db } = require('../../db/database');
 
@@ -283,7 +282,7 @@ fetchAllData = (path, selection) => {
   });
 }
 
-tableOutput = (data = seedData, selection = "Hello") => {
+tableOutput = (data, selection = "Hello") => {
   let lineBreak = `\n`;
   let title = `----------- ${selection} -----------`;
   console.log(`${blue}${lineBreak}${title}${white}${lineBreak}`);
