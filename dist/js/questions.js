@@ -1,23 +1,27 @@
 const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../lib/util");
 const axios = require('axios');
+const inquirer = require("inquirer");
 
 choicesStart = [
+  new inquirer.Separator(`-- Employees --`),
   "View All Employees",
   "Add Employee", // see questionsAddEmployee
   "Update Employee Role", // see questionsUpdateEmployee Role
-
-  "Update Employee Manager", //todo
-  
+  "Update Employee Manager",
+  "Delete Employee",
+  new inquirer.Separator(`-- Roles --`),
   "View All Roles",
   "Add Role", // see questionsAddRole
+  "Delete Role",
+  new inquirer.Separator(`-- Departments --`),
   "View All Departments",
   "Add Department", // see questionsAddDepartment
-  "View Employees by Manager", //todo:DONE
-  "View Employees by Department", //todo:DONE
-  "View Department by Salary", //todo
-  "Delete Role", //todo:DONE
-  "Delete Department", //todo:DONE
-  "Delete Employee", //todo:DONE
+  "Delete Department", 
+  new inquirer.Separator(`-- Reports --`),
+  "View Employees by Manager",
+  "View Employees by Department",
+  "View Department by Salary",
+  new inquirer.Separator(`-- Quit --`),
   "Quit",
 ];
 
@@ -41,12 +45,13 @@ choicesEmployees = async () => {
 
 const questionsUserChoice = [
   {
-    prefix: "\n⠋🟡",
+    prefix: `${white}\n⠋🟡`,
     type: "rawlist",
     name: "userSelection",
-    message: `${white}What would you like to do?`,
+    message: `What would you like to do?`,
     choices: choicesStart,
     suffix: " 🟡",
+    pageSize: 10,
   },
 ];
 

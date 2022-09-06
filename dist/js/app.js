@@ -12,7 +12,7 @@ const { banner } = require("./banner");
 const { blue, white } = require("../../lib/util");
 const consoleTable = require('console.table');
 const axios = require('axios');
-const { db } = require('../../db/database');
+// const { db } = require('../../db/database');
 
 //ASK USER WHAT ACTION TO PERFORM
 getWhatToDo = async () => {
@@ -86,8 +86,8 @@ getInfo = async (askQuestions, path, type) => {
     .then((id_2) => deptId = id_2)
     .then(() => type === "updateRole" ? fetchManagerId('api/employees', input.employee, type) : fetchManagerId('api/employees', input.employeeManager, type) )
     .then((id_3) => !id_3 ? managerId === undefined : managerId = id_3[0].id)
-    .then(() => console.log('ask question manager id = ', managerId))
-    .then(() => console.log('1 = ', type, input, '3 = ', roleId, '3a = ', managerId, '4 = ', path))
+    // .then(() => console.log('ask question manager id = ', managerId))
+    // .then(() => console.log('1 = ', type, input, '3 = ', roleId, '3a = ', managerId, '4 = ', path))
     .then(() => type === "updateRole" ? (
       // axios.put(`http://localhost:3001/${path}`, {
       axios.put(`http://localhost:3001/${path}/update-role`, {
@@ -115,8 +115,8 @@ getInfo = async (askQuestions, path, type) => {
 
 //FETCHING DEPT ID TO USE WHEN ADDING A NEW ROLE
 fetchDepartmentId = async (path, department, type) => {
-  console.log('FETCH DEPT = ', path, department, type);
-  console.log('FETCH PATH = ', `http://localhost:3001/${path}/${department}`);
+  // console.log('FETCH DEPT = ', path, department, type);
+  // console.log('FETCH PATH = ', `http://localhost:3001/${path}/${department}`);
 
   if (type === 'role') {
     let dept = await axios.get(`http://localhost:3001/${path}/${department}`);
@@ -127,8 +127,8 @@ fetchDepartmentId = async (path, department, type) => {
 
 //FETCHING MANAGER ID TO USE WHEN ADDING A NEW EMPLOYEE
 fetchManagerId = async (path, employeeManager, type) => {
-  console.log('FETCH MGR = ', path, employeeManager, type);
-  console.log('FETCH PATH = ', `http://localhost:3001/${path}/${employeeManager}`);
+  // console.log('FETCH MGR = ', path, employeeManager, type);
+  // console.log('FETCH PATH = ', `http://localhost:3001/${path}/${employeeManager}`);
 
   if (type === 'employee' || type === 'updateRole' || type === 'updateManager') {
     let getEmployee = await axios.get(`http://localhost:3001/${path}/${employeeManager}`);
@@ -136,7 +136,7 @@ fetchManagerId = async (path, employeeManager, type) => {
 
     let employee = getEmployee.data;
 
-    console.log('1) employee = ', getEmployee.data)
+    // console.log('1) employee = ', getEmployee.data)
 
     return employee;
   }
@@ -144,8 +144,8 @@ fetchManagerId = async (path, employeeManager, type) => {
 
 //FETCHING MANAGER ID TO USE WHEN ADDING A NEW EMPLOYEE
 fetchRoleId = async (path, role, type) => {
-  console.log('FETCH ROLE = ', path, role, type);
-  console.log('FETCH PATH = ', `http://localhost:3001/${path}/${role}`);
+  // console.log('FETCH ROLE = ', path, role, type);
+  // console.log('FETCH PATH = ', `http://localhost:3001/${path}/${role}`);
 
   if (type === 'employee' || type === 'updateRole') {
     let roleId = await axios.get(`http://localhost:3001/${path}/${role}`);
@@ -155,7 +155,7 @@ fetchRoleId = async (path, role, type) => {
 }
 
 postAllData = async (path, input, type, roleId, deptId, managerId) => {
-  console.log('POST = ', input, 'TYPE =', type, 'ROLE ID = ', roleId,  'DEPT ID = ', deptId, 'MGR ID = ', managerId);
+  // console.log('POST = ', input, 'TYPE =', type, 'ROLE ID = ', roleId,  'DEPT ID = ', deptId, 'MGR ID = ', managerId);
 
   switch (type) {
     case "role":
@@ -234,18 +234,18 @@ renderInput = (input, type) => {
   
   input.firstName ? inputToRender = `${input.firstName} ${input.lastName}` : input.department ? inputToRender = input.department : inputToRender = input.role;
 
-  console.log(input, type, input.role, input.employee, inputToRender);
+  // console.log(input, type, input.role, input.employee, inputToRender);
   
   type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : type === "delete" ? console.log(`\n${blue}Deleted ${input}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
 }
 
 //RENDER EMPLOYEE BY MANAGER OR EMPLOYEE BY DEPARTMENT
 fetchEmployeeBySegmentData = async (path, selection, renderTitle) => {
-  console.log(path, selection, `http://localhost:3001/${path}/${selection}`);
+  // console.log(path, selection, `http://localhost:3001/${path}/${selection}`);
 
   let finalList = await axios.get(`http://localhost:3001/${path}/${selection}`);
 
-  console.log(finalList.data);
+  // console.log(finalList.data);
 
   finalList = finalList.data;
   await tableOutput(finalList, renderTitle);

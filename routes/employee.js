@@ -16,13 +16,13 @@ employees.route('/')
   })
 
   employees.put('/update-role', (req, res) => {
-    // res.send('hello put update role');
     updateRole(req.body);
+    res.end();
   })
 
   employees.put('/update-manager', (req, res) => {
-    // res.send('hello put update manager');
     updateManager(req.body);
+    res.end();
   })
 
   employees.get('/viewbymanager', async (req, res) => {
