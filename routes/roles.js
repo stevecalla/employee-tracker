@@ -4,7 +4,6 @@ const { getRoles, getRoleId, addRole, deleteRole } = require('../controller/role
 
 // CURRENT ROUTE = /api/roles/
 
-// ROUTES FOR ROLES
 roles.route('/')
   .get( async (req, res) => {
     res.send(await getRoles());

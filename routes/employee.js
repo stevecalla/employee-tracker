@@ -4,7 +4,6 @@ const { getEmployees, addEmployee, deleteEmployee, getEmployeeId, getEmployeesBy
 
 // CURRENT ROUTE = /api/employees/
 
-// ROUTE FOR EMPLOYEES
 employees.route('/')
   .get( async (req, res) => {
     res.send(await getEmployees());
@@ -17,16 +16,12 @@ employees.route('/')
   })
 
   employees.put('/update-role', (req, res) => {
-    console.log('put =', req.body);
-    res.send('hello put update role');
-
+    // res.send('hello put update role');
     updateRole(req.body);
   })
 
   employees.put('/update-manager', (req, res) => {
-    console.log('put =', req.body);
-    res.send('hello put update manager');
-
+    // res.send('hello put update manager');
     updateManager(req.body);
   })
 
