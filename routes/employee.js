@@ -1,46 +1,46 @@
 const express = require('express');
 const employees = express.Router();
-const { db } = require('../db/database');
+const { getEmployees, addEmployee, deleteEmployee, getEmployeeId, getEmployeesByDepartment, getEmployeesByManager, updateManager, updateRole } = require('../controller/employees');
 
 // CURRENT ROUTE = /api/employees/
 
 // ROUTE FOR EMPLOYEES
 employees.route('/')
-  .get((req, res) =>
-    db.query('SELECT * FROM employees', function (err, results) {
-      res.send(results);
-    })
-  )
+  .get( async (req, res) => {
+    res.send(await getEmployees());
+  })
   .post((req, res) => {
-    //post the input using an INSERT QUERY
-    // console.log('1 =', req);
-    // console.log('2 =', req.body);
-    res.send('hello');
-
-    db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${req.body.first_name}", "${req.body.last_name}", "${req.body.role_id}", "${req.body.manager_id}")`);
+    addEmployee(req.body);
+  })
+  .delete((req, res) => {
+    deleteEmployee(req.body);
   })
 
-  employees.get('/:manager', async (req, res) =>{
-    let manager = req.params;
-    // console.log('2 = ', manager);
+  employees.put('/update-role', (req, res) => {
+    console.log('put =', req.body);
+    res.send('hello put update role');
 
-    let firstName = req.params.manager.split(' ')[0];
-    let lastName = req.params.manager.split(' ')[1];
+    updateRole(req.body);
+  })
 
-    let result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
+  employees.put('/update-manager', (req, res) => {
+    console.log('put =', req.body);
+    res.send('hello put update manager');
 
-    // console.log(result);
-    // console.log('5 = ', result, result.length, result[0].id);
+    updateManager(req.body);
+  })
 
-    // result.length !== 0 ? result = result[0].manager_id : result = 0;
-    // res.json(result);
+  employees.get('/viewbymanager', async (req, res) => {
+    res.json(await getEmployeesByManager());
+  });
 
-    result.length !== 0 ? result = result : result = 0;
+  employees.get('/viewbydepartment', async (req, res) => { 
+    res.json(await getEmployeesByDepartment());
+  });
+
+  employees.get('/:manager', async (req, res) => {
+    let result = await getEmployeeId(req.params);
     res.json(result);
-
-    // res.json(result[0].manager_id);
   })
-
-
 
 module.exports = employees;

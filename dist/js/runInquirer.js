@@ -5,6 +5,10 @@ const {
   questionsAddRole,
   questionsAddEmployee,
   questionsUpdateEmployeeRole,
+  questionsUpdateEmployeeManager,
+  questionsDeleteRole,
+  questionsDeleteDepartment,
+  questionsDeleteEmployee,
 } = require("./questions");
 
 getUserChoice = async () => {
@@ -32,10 +36,30 @@ getUpdateEmployeeRole = () => {
   return updateEmployeeRole;
 };
 
+getUpdateEmployeeManager = () => {
+  const updateEmployeeManager = inquirer.prompt(questionsUpdateEmployeeManager);
+  return updateEmployeeManager;
+};
+
+getDeleteRoleDeptEmp = async (list) => {
+  if (list === "department") {
+    const deleteDepartment = await inquirer.prompt(questionsDeleteDepartment);
+    return deleteDepartment;
+  } else if (list === "employee") {
+    const deleteEmployee = inquirer.prompt(questionsDeleteEmployee);
+    return deleteEmployee;
+  } else {
+    const deleteRole = await inquirer.prompt(questionsDeleteRole);
+    return deleteRole;
+  };
+};
+
 module.exports = {
   getUserChoice,
   getDepartment,
   getRole,
   getEmployee,
   getUpdateEmployeeRole,
+  getUpdateEmployeeManager,
+  getDeleteRoleDeptEmp,
 };

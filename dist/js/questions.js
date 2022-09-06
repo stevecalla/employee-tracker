@@ -1,73 +1,43 @@
 const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../lib/util");
-// const { connectDb } = require('../../database');
+const axios = require('axios');
 
 choicesStart = [
-  "View All Employees", // todo:returns a table of employees
+  "View All Employees",
   "Add Employee", // see questionsAddEmployee
   "Update Employee Role", // see questionsUpdateEmployee Role
-  "View All Roles", // todo:returns a table of role
-  "Add Role", // see questionsAddRole; //todo:need to update roles choice list with new role
-  "View All Departments", // todo:returns a table of departments
+
+  "Update Employee Manager", //todo
+  
+  "View All Roles",
+  "Add Role", // see questionsAddRole
+  "View All Departments",
   "Add Department", // see questionsAddDepartment
+  "View Employees by Manager", //todo:DONE
+  "View Employees by Department", //todo:DONE
+  "View Department by Salary", //todo
+  "Delete Role", //todo:DONE
+  "Delete Department", //todo:DONE
+  "Delete Employee", //todo:DONE
   "Quit",
 ];
 
-choicesDepartments = () => {
-  // let test = [];
-
-  // connectDb.promise().query("SELECT id, name FROM departments ORDER BY id;")
-  //   .then(([rows, fields]) => {
-  //     console.log(rows)
-  //     test = rows.map(element => element.name);
-  //     console.log('1 = ', test);
-  //     test2(test);
-  //   })
-  //   .catch(console.log)
-  //   .then( () => connectDb.end());
-
-  // console.log('2 = ', test);
-  // return test;
-  let departments = [
-    "Engineering",
-    "Finance",
-    "Legal",
-    "Sales",
-    "Service",
-  ]
+choicesDepartments = async () => {
+  let departmentData = await axios.get(`http://localhost:3001/api/departments`);
+  let departments = departmentData.data.map(element => element.Department);
   return departments;
-  // return [
-  //   "Engineering",
-  //   "Finance",
-  //   "Legal",
-  //   "Sales",
-  //   "Service",
-  // ]
 }
 
-choicesRoles = [
-  "Sales Lead",  //sales
-  "Sales Person", //sales
-  "Lead Engineer", //engineering
-  "Software Engineer",  //engineering
-  "Account Manager", //finance
-  "Accountant", //finance
-  "Legal Team Lead", //legal
-  "Lawyer", //legal
-  "Customer Service Representative", //service
-];
+choicesRoles = async () => {
+  let rolesData = await axios.get(`http://localhost:3001/api/roles`);
+  let roles = rolesData.data.map(element => element.Title);
+  return roles;
+}
 
-choicesEmployees = [
-  "Sue Eight",
-  "Zak Five",
-  "Doreen Four",
-  "Molly Nine",
-  "John One",
-  "Megan Seven",
-  "Emily Six",
-  "Molly Ten",
-  "Rita Three",
-  "Beth Two",
-];
+choicesEmployees = async () => {
+  let employeesData = await axios.get(`http://localhost:3001/api/employees`);
+  let employees = employeesData.data.map(element => `${element.First_Name} ${element.Last_Name}`);
+  return employees;
+}
 
 const questionsUserChoice = [
   {
@@ -188,14 +158,7 @@ const questionsAddEmployee = [
     name: "employeeManager",
     message: `${white}Enter the ${blue}employee's manager${white}?`,
     choices: choicesEmployees,
-    // default: "Joanne Smith",
     suffix: " 🟡",
-    // validate(answer) {
-    //   return isBlank(answer, "the role");
-    // },
-    // filter(answer) {
-    //   return capitalizeFirstCharacter(answer);
-    // },
   },
   // {
   //   prefix: "⠋🟡 5 of 6)",
@@ -223,25 +186,99 @@ const questionsAddEmployee = [
 ];
 
 const questionsUpdateEmployeeRole = [ // maps to Add Role
-{
-  prefix: "⠋🟡 1 of 2)",
-  type: "rawlist",
-  name: "employee",
-  message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
-  choices: choicesEmployees,
-  // default: "Manager",
-  suffix: " 🟡",
-},
-{
-  prefix: "⠋🟡 2 of 2)",
-  type: "rawlist",
-  name: "newRole",
-  message: `\u001b[0;1mSelect ${blue}new role${white}?`,
-  choices: choicesRoles,
-  default: "Manager",
-  suffix: " 🟡",
-},
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "employee",
+    message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
+    choices: choicesEmployees,
+    // default: "Manager",
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "rawlist",
+    name: "role",
+    message: `\u001b[0;1mSelect ${blue}new role${white}?`,
+    choices: choicesRoles,
+    default: "Manager",
+    suffix: " 🟡",
+  },
 ];
+
+const questionsUpdateEmployeeManager = [ // maps to Add Role
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "employee",
+    message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
+    choices: choicesEmployees,
+    // default: "Manager",
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "rawlist",
+    name: "employeeManager",
+    message: `${white}Enter the ${blue}employee's manager${white}?`,
+    choices: choicesEmployees,
+    suffix: " 🟡",
+  },
+];
+
+const questionsDeleteRole = [ // maps to Delete Role
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "role",
+    message: `\u001b[0;1mSelect ${blue}role${white} to delete?`,
+    choices: choicesRoles,
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "confirm",
+    name: "confirm",
+    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.role}${white}?`,
+    suffix: " 🟡",
+  },
+];
+
+const questionsDeleteDepartment = [ // maps to Delete Role
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "department",
+    message: `\u001b[0;1mSelect ${blue}department${white} to delete?`,
+    choices: choicesDepartments,
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "confirm",
+    name: "confirm",
+    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.department}${white}?`,
+    suffix: " 🟡",
+  },
+];
+
+const questionsDeleteEmployee = [ // maps to Delete Role
+  {
+    prefix: "⠋🟡 1 of 2)",
+    type: "rawlist",
+    name: "employee",
+    message: `\u001b[0;1mSelect ${blue}employee${white} to delete?`,
+    choices: choicesEmployees,
+    suffix: " 🟡",
+  },
+  {
+    prefix: "⠋🟡 2 of 2)",
+    type: "confirm",
+    name: "confirm",
+    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.employee}${white}?`,
+    suffix: " 🟡",
+  },
+]
 
 module.exports = {
   questionsUserChoice,
@@ -249,4 +286,8 @@ module.exports = {
   questionsAddRole,
   questionsAddEmployee,
   questionsUpdateEmployeeRole,
+  questionsUpdateEmployeeManager,
+  questionsDeleteRole,
+  questionsDeleteDepartment,
+  questionsDeleteEmployee,
 };

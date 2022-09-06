@@ -4,11 +4,13 @@ const {
   getRole,
   getEmployee,
   getUpdateEmployeeRole,
+  getUpdateEmployeeManager,
+  getDeleteRoleDeptEmp,
+
 } = require("./runInquirer");
 const { banner } = require("./banner");
 const { blue, white } = require("../../lib/util");
 const consoleTable = require('console.table');
-const { seedData } = require('../../db/testData');
 const axios = require('axios');
 const { db } = require('../../db/database');
 
@@ -25,7 +27,12 @@ getWhatToDo = async () => {
           getInfo(getEmployee, 'api/employees', "employee");
           break;
         case "Update Employee Role":
-          getInfo(getUpdateEmployeeRole, "updateRole");
+          getInfo(getUpdateEmployeeRole,'api/employees', "updateRole");
+          // updateEmployeeRole();
+          break;
+        case "Update Employee Manager":
+          getInfo(getUpdateEmployeeManager,'api/employees', "updateManager");
+          // updateEmployeeRole();
           break;
         case "View All Roles":
           fetchAllData('api/roles', selection);
@@ -38,6 +45,24 @@ getWhatToDo = async () => {
           break;
         case "Add Department":
           getInfo(getDepartment, 'api/departments', "department");
+          break;
+        case "View Employees by Manager":
+          fetchEmployeeBySegmentData('api/employees', "viewbymanager", "View by Manager");
+          break;
+        case "View Employees by Department":
+          fetchEmployeeBySegmentData('api/employees', "viewbydepartment", "View by Department");
+          break;
+        case "View Department by Salary":
+          fetchEmployeeBySegmentData('api/departments', "viewdeptbysalary", "View Department by Salary");
+          break;
+        case "Delete Role":
+          deleteRoleDeptEmp('api/roles', "delete", "role");
+          break;
+        case "Delete Department":
+          deleteRoleDeptEmp('api/departments', "delete", "department");
+          break;
+        case "Delete Employee":
+          deleteRoleDeptEmp('api/employees', "delete", "employee");
           break;
         default:
           console.log(selection)
@@ -59,10 +84,31 @@ getInfo = async (askQuestions, path, type) => {
     .then((id_1) => roleId = id_1)
     .then(() => fetchDepartmentId('api/departments', input.roleDepartment, type))
     .then((id_2) => deptId = id_2)
-    .then(() => fetchManagerId('api/employees', input.employeeManager, type))
+    .then(() => type === "updateRole" ? fetchManagerId('api/employees', input.employee, type) : fetchManagerId('api/employees', input.employeeManager, type) )
     .then((id_3) => !id_3 ? managerId === undefined : managerId = id_3[0].id)
     .then(() => console.log('ask question manager id = ', managerId))
-    .then(() => postAllData(path, input, type, roleId, deptId, managerId))
+    .then(() => console.log('1 = ', type, input, '3 = ', roleId, '3a = ', managerId, '4 = ', path))
+    .then(() => type === "updateRole" ? (
+      // axios.put(`http://localhost:3001/${path}`, {
+      axios.put(`http://localhost:3001/${path}/update-role`, {
+        id: managerId,
+        role_id: roleId
+        })
+        .catch(function (error) {
+          // console.log(error);
+        })
+      ) 
+      : type === "updateManager" ? (
+        // axios.put(`http://localhost:3001/${path}`, {
+        axios.put(`http://localhost:3001/${path}/update-manager`, {
+          employee: input.employee,
+          manager_id: managerId
+          })
+          .catch(function (error) {
+            // console.log(error);
+          })
+      ) : postAllData(path, input, type, roleId, deptId, managerId)
+      )
     .then(() => renderInput(input, type))
     .then(() => getWhatToDo());
 };
@@ -84,7 +130,7 @@ fetchManagerId = async (path, employeeManager, type) => {
   console.log('FETCH MGR = ', path, employeeManager, type);
   console.log('FETCH PATH = ', `http://localhost:3001/${path}/${employeeManager}`);
 
-  if (type === 'employee') {
+  if (type === 'employee' || type === 'updateRole' || type === 'updateManager') {
     let getEmployee = await axios.get(`http://localhost:3001/${path}/${employeeManager}`);
     // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
 
@@ -101,7 +147,7 @@ fetchRoleId = async (path, role, type) => {
   console.log('FETCH ROLE = ', path, role, type);
   console.log('FETCH PATH = ', `http://localhost:3001/${path}/${role}`);
 
-  if (type === 'employee') {
+  if (type === 'employee' || type === 'updateRole') {
     let roleId = await axios.get(`http://localhost:3001/${path}/${role}`);
     // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
     return roleId.data;
@@ -185,9 +231,42 @@ postAllData = async (path, input, type, roleId, deptId, managerId) => {
 //DETERMINE WHICH INPUT TO RENDER TO THE USER
 renderInput = (input, type) => {
   let inputToRender = "";
-  input.firstName ? inputToRender = `${input.firstName} ${input.lastName}` : input.department ? inputToRender = input.department : inputToRender = input.role
+  
+  input.firstName ? inputToRender = `${input.firstName} ${input.lastName}` : input.department ? inputToRender = input.department : inputToRender = input.role;
 
-  type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.newRole}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
+  console.log(input, type, input.role, input.employee, inputToRender);
+  
+  type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : type === "delete" ? console.log(`\n${blue}Deleted ${input}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
+}
+
+//RENDER EMPLOYEE BY MANAGER OR EMPLOYEE BY DEPARTMENT
+fetchEmployeeBySegmentData = async (path, selection, renderTitle) => {
+  console.log(path, selection, `http://localhost:3001/${path}/${selection}`);
+
+  let finalList = await axios.get(`http://localhost:3001/${path}/${selection}`);
+
+  console.log(finalList.data);
+
+  finalList = finalList.data;
+  await tableOutput(finalList, renderTitle);
+  getWhatToDo();
+}
+
+//UTILITY FUNCTIONS
+function sortUtility(listToSort) {
+  let sortedList = listToSort.sort(function (a, b) {
+    const nameA = a.sortKey.toUpperCase(); //ignore upper and lowercase
+    const nameB = b.sortKey.toUpperCase(); //ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    //names must be equal
+    return 0;
+  });
+  return sortedList;
 }
 
 fetchAllData = (path, selection) => {
@@ -205,13 +284,31 @@ fetchAllData = (path, selection) => {
   });
 }
 
-tableOutput = (data = seedData, selection = "Hello") => {
+tableOutput = (data, selection = "Hello") => {
   let lineBreak = `\n`;
   let title = `----------- ${selection} -----------`;
   console.log(`${blue}${lineBreak}${title}${white}${lineBreak}`);
   console.table(data);
   console.log(`${blue}${title}${white}`);
 };
+
+deleteRoleDeptEmp = async (path, type, list) => {
+  await getDeleteRoleDeptEmp(list)
+    .then((data) => input = data)
+    // .then(() => console.log(input, input.confirm, input[list]))
+    .then(() => {if (input.confirm) {
+      axios.delete(`http://localhost:3001/${path}`, {
+        // data: { name: input.department }
+        data: { [list]: input[list] }
+        })
+        .catch(function (error) {
+          // console.log(error);
+        })
+    }})
+    // .then(() => renderInput(input.department, type))
+    .then(() => renderInput(input[list], type))
+    .then(() => getWhatToDo())
+}
 
 // console.log(banner);
 getWhatToDo();
