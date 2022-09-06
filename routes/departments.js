@@ -28,8 +28,7 @@ departments.route('/')
   });
 
   departments.get('/:department', async (req, res) =>{
-    let result = (await getDepartmentId(req.params.department));
-    result.length !== 0 ? result = result[0].id : result = 0;
+    let result = await getDepartmentId(req.params.department);
     res.json(result);
   });
 

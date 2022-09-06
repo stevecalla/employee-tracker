@@ -1,32 +1,23 @@
 const express = require('express');
 const employees = express.Router();
 const { db } = require('../db/database');
+const { getEmployees, addEmployee, deleteEmployee, getEmployeeId, getEmployeesByDepartment, getEmployeesByManager } = require('../controller/employees');
 
 // CURRENT ROUTE = /api/employees/
 
 // ROUTE FOR EMPLOYEES
 employees.route('/')
-  .get((req, res) =>
-    db.query(employeeTableSQL, function (err, results) {
-      // db.query('SELECT * FROM employees', function (err, results) {
-      res.send(results);
-    })
-  )
+  .get( async (req, res) => {
+    res.send(await getEmployees());
+  })
   .post((req, res) => {
-    //post the input using an INSERT QUERY
-    // console.log('1 =', req);
-    // console.log('post =', req.body);
-    res.send('hello');
-
-    db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${req.body.first_name}", "${req.body.last_name}", "${req.body.role_id}", "${req.body.manager_id}")`);
+    addEmployee(req.body.first_name, req.body.last_name, req.body.role_id, req.body.manager_id);
   })
   .put((req, res) => {
-    //post the input using an INSERT QUERY
     // console.log('1 =', req);
     console.log('put =', req.body);
     res.send('hello');
 
-    
     if (req.body.role_id) {
       db.query(`UPDATE employees SET role_id = ${req.body.role_id} WHERE id = ${req.body.id}`);
     } else {
@@ -35,52 +26,22 @@ employees.route('/')
 
       db.query(`UPDATE employees SET manager_id = ${req.body.manager_id} WHERE first_name = "${firstName}" and last_name = "${lastName}"`);
     }
-
-
-
   })
   .delete((req, res) => {
-    //post the input using an INSERT QUERY
-    // console.log('1 delete emp =', req);
-    // console.log('2 delete emp =', req.body, req.body.employee);
-    res.send('hello');
-
-    let firstName = req.body.employee.split(' ')[0];
-    let lastName = req.body.employee.split(' ')[1];
-    console.log('a = ', firstName, 'b = ', lastName);
-
-    db.query(`DELETE FROM employees WHERE first_name = "${firstName}" and last_name = "${lastName}"`);
-
+    deleteEmployee(req.body);
   })
 
   employees.get('/viewbymanager', async (req, res) => {
-    console.log('req.params 23 = ', req.params);
-
-    let result = await db.awaitQuery(employeeByManagerSQL);
-
-    res.json(result);
+    res.json(await getEmployeesByManager());
   });
 
-  employees.get('/viewbydepartment', async (req, res) => {
-    console.log('req.params 24 = ', req.params);
-
-    let result = await db.awaitQuery(employeeByDepartmentSQL);
-    
-    res.json(result);
+  employees.get('/viewbydepartment', async (req, res) => { 
+    res.json(await getEmployeesByDepartment());
   });
 
   employees.get('/:manager', async (req, res) => {
-    console.log('req.params 22 = ', req.params);
-
-    let firstName = req.params.manager.split(' ')[0];
-    let lastName = req.params.manager.split(' ')[1];
-
-    let result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${firstName}" AND last_name = "${lastName}"`);
-
-    result.length !== 0 ? result = result : result = 0;
+    let result = await getEmployeeId(req.params);
     res.json(result);
-
-    // res.json(result[0].manager_id);
   })
 
   const employeeTableSQL = `
