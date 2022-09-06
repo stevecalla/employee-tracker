@@ -1,6 +1,5 @@
 const express = require('express');
 const departments = express.Router();
-// const { db } = require('../db/database');
 const { getDepartments, getDepartmentId, getDeptBySalary, addDepartment, deleteDepartment } = require('../controller/departments.js');
 
 // CURRENT ROUTE = /api/departments/
