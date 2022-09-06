@@ -12,7 +12,9 @@ const { banner } = require("./banner");
 const { blue, white } = require("../../lib/util");
 const consoleTable = require('console.table');
 const axios = require('axios');
-// const { db } = require('../../db/database');
+const Departments = require('../../lib/Departments');
+const Roles = require('../../lib/Roles');
+const Employees = require('../../lib/Employees');
 
 //ASK USER WHAT ACTION TO PERFORM
 getWhatToDo = async () => {
@@ -21,7 +23,8 @@ getWhatToDo = async () => {
     .then((selection) => { //determine which question or data to display
       switch (selection) {
         case "View All Employees":
-          fetchAllData('api/employees', selection);
+          let viewAllEmployees = new Employees();
+          viewAllEmployees.fetchAllEmployees('api/employees', "View All Employees");
           break;
         case "Add Employee":
           getInfo(getEmployee, 'api/employees', "employee");
@@ -34,18 +37,32 @@ getWhatToDo = async () => {
           getInfo(getUpdateEmployeeManager,'api/employees', "updateManager");
           // updateEmployeeRole();
           break;
+        case "Delete Employee":
+          deleteRoleDeptEmp('api/employees', "delete", "employee");
+          break;
+
         case "View All Roles":
-          fetchAllData('api/roles', selection);
+          let viewAllRoles = new Roles();
+          viewAllRoles.fetchAllRoles('api/roles', "View All Roles");
           break;
         case "Add Role":
           getInfo(getRole, 'api/roles', "role");
           break;
+        case "Delete Role":
+          deleteRoleDeptEmp('api/roles', "delete", "role");
+          break;
+
         case "View All Departments":
-          fetchAllData('api/departments', selection);
+          let viewAllDepartments = new Departments();
+          viewAllDepartments.fetchAllDepartments('api/departments', "View All Departments");
           break;
         case "Add Department":
           getInfo(getDepartment, 'api/departments', "department");
           break;
+        case "Delete Department":
+          deleteRoleDeptEmp('api/departments', "delete", "department");
+          break;
+
         case "View Employees by Manager":
           fetchEmployeeBySegmentData('api/employees', "viewbymanager", "View by Manager");
           break;
@@ -55,18 +72,9 @@ getWhatToDo = async () => {
         case "View Department by Salary":
           fetchEmployeeBySegmentData('api/departments', "viewdeptbysalary", "View Department by Salary");
           break;
-        case "Delete Role":
-          deleteRoleDeptEmp('api/roles', "delete", "role");
-          break;
-        case "Delete Department":
-          deleteRoleDeptEmp('api/departments', "delete", "department");
-          break;
-        case "Delete Employee":
-          deleteRoleDeptEmp('api/employees', "delete", "employee");
-          break;
+
         default:
-          console.log(selection)
-          // process.exit();
+          process.exit();
     }});
 };
 
@@ -269,21 +277,6 @@ function sortUtility(listToSort) {
   return sortedList;
 }
 
-fetchAllData = (path, selection) => {
-  axios.get(`http://localhost:3001/${path}`)
-  .then(function (response) {
-    // handle success
-    tableOutput(response.data, selection);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .then(function () {
-    getWhatToDo();
-  });
-}
-
 tableOutput = (data, selection = "Hello") => {
   let lineBreak = `\n`;
   let title = `----------- ${selection} -----------`;
@@ -313,6 +306,6 @@ deleteRoleDeptEmp = async (path, type, list) => {
 // console.log(banner);
 getWhatToDo();
 
-module.exports = {
-  // getWhatToDo,
-};
+// module.exports = {
+//   getWhatToDo
+// };

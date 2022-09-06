@@ -10,18 +10,22 @@ choicesStart = [
   "Update Employee Manager",
   "Delete Employee",
   new inquirer.Separator(`-- Roles --`),
+
   "View All Roles",
   "Add Role", // see questionsAddRole
   "Delete Role",
   new inquirer.Separator(`-- Departments --`),
+  
   "View All Departments",
   "Add Department", // see questionsAddDepartment
   "Delete Department", 
   new inquirer.Separator(`-- Reports --`),
+
   "View Employees by Manager",
   "View Employees by Department",
   "View Department by Salary",
   new inquirer.Separator(`-- Quit --`),
+  
   "Quit",
 ];
 
