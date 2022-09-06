@@ -1,7 +1,7 @@
 const express = require('express');
 const employees = express.Router();
 const { db } = require('../db/database');
-const { getEmployees, addEmployee, deleteEmployee, getEmployeeId, getEmployeesByDepartment, getEmployeesByManager } = require('../controller/employees');
+const { getEmployees, addEmployee, deleteEmployee, getEmployeeId, getEmployeesByDepartment, getEmployeesByManager, updateManager, updateRole } = require('../controller/employees');
 
 // CURRENT ROUTE = /api/employees/
 
@@ -11,7 +11,7 @@ employees.route('/')
     res.send(await getEmployees());
   })
   .post((req, res) => {
-    addEmployee(req.body.first_name, req.body.last_name, req.body.role_id, req.body.manager_id);
+    addEmployee(req.body);
   })
   .put((req, res) => {
     // console.log('1 =', req);
@@ -19,12 +19,9 @@ employees.route('/')
     res.send('hello');
 
     if (req.body.role_id) {
-      db.query(`UPDATE employees SET role_id = ${req.body.role_id} WHERE id = ${req.body.id}`);
+      updateRole(req.body);
     } else {
-      let firstName = req.body.employee.split(' ')[0];
-      let lastName = req.body.employee.split(' ')[1];
-
-      db.query(`UPDATE employees SET manager_id = ${req.body.manager_id} WHERE first_name = "${firstName}" and last_name = "${lastName}"`);
+      updateManager(req.body);
     }
   })
   .delete((req, res) => {

@@ -11,8 +11,8 @@ const getRoleId = async (title) => {
   return result;
 }
 
-const addRole = async (role, salary, department_id) => {
-  db.query(`INSERT INTO roles(title, salary, department_id) VALUES ("${role}", "${salary}", "${department_id}")`);
+const addRole = async (req) => {
+  db.query(`INSERT INTO roles(title, salary, department_id) VALUES ("${req.role}", "${req.salary}", "${req.department_id}")`);
 }
 
 const deleteRole = (role) => {

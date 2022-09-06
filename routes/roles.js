@@ -10,7 +10,7 @@ roles.route('/')
     res.send(await getRoles());
   })
   .post((req, res) => {
-    addRole(req.body.role, req.body.salary, req.body.department_id);
+    addRole(req.body);
   })
   .delete((req, res) => {
     deleteRole(req.body.role);

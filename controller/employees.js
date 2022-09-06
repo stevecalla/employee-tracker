@@ -5,8 +5,19 @@ const getEmployees = async () => {
   return result;
 }
 
-const addEmployee = async (first_name, last_name, role_id, manager_id) => {
-  db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${first_name}", "${last_name}", "${role_id}", "${manager_id}")`);
+const addEmployee = async (req) => {
+  db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${req.first_name}", "${req.last_name}", "${req.role_id}", "${req.manager_id}")`);
+}
+
+const updateManager = async (req) => {
+  let first_name = req.employee.split(' ')[0];
+  let last_name = req.employee.split(' ')[1];
+
+  db.query(`UPDATE employees SET manager_id = ${req.manager_id} WHERE first_name = "${first_name}" and last_name = "${last_name}"`);
+}
+
+const updateRole = async (req) => {
+  db.query(`UPDATE employees SET role_id = ${req.role_id} WHERE id = ${req.id}`);
 }
 
 const deleteEmployee = (req) => {
@@ -92,4 +103,6 @@ module.exports = {
   getEmployeeId,
   getEmployeesByManager,
   getEmployeesByDepartment,
+  updateManager,
+  updateRole,
 }
