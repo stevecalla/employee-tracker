@@ -27,18 +27,18 @@ getWhatToDo = async () => {
           viewAllEmployees.fetchAllEmployees('api/employees', "View All Employees");
           break;
         case "Add Employee":
-          getInfo(getEmployee, 'api/employees', "employee");
+          getInfo(getEmployee, 'api/employees', "employee"); //todo
           break;
         case "Update Employee Role":
-          getInfo(getUpdateEmployeeRole,'api/employees', "updateRole");
+          getInfo(getUpdateEmployeeRole,'api/employees', "updateRole"); //todo
           // updateEmployeeRole();
           break;
         case "Update Employee Manager":
-          getInfo(getUpdateEmployeeManager,'api/employees', "updateManager");
+          getInfo(getUpdateEmployeeManager,'api/employees', "updateManager");//todo
           // updateEmployeeRole();
           break;
         case "Delete Employee":
-          deleteRoleDeptEmp('api/employees', "delete", "employee");
+          deleteRoleDeptEmp('api/employees', "delete", "employee");//todo
           break;
 
         case "View All Roles":
@@ -46,10 +46,10 @@ getWhatToDo = async () => {
           viewAllRoles.fetchAllRoles('api/roles', "View All Roles");
           break;
         case "Add Role":
-          getInfo(getRole, 'api/roles', "role");
+          getInfo(getRole, 'api/roles', "role");//todo
           break;
         case "Delete Role":
-          deleteRoleDeptEmp('api/roles', "delete", "role");
+          deleteRoleDeptEmp('api/roles', "delete", "role");//todo
           break;
 
         case "View All Departments":
@@ -57,22 +57,26 @@ getWhatToDo = async () => {
           viewAllDepartments.fetchAllDepartments('api/departments', "View All Departments");
           break;
         case "Add Department":
-          getInfo(getDepartment, 'api/departments', "department");
+          getInfo(getDepartment, 'api/departments', "department");//todo
           break;
         case "Delete Department":
-          deleteRoleDeptEmp('api/departments', "delete", "department");
+          deleteRoleDeptEmp('api/departments', "delete", "department");//todo
           break;
 
         case "View Employees by Manager":
-          fetchEmployeeBySegmentData('api/employees', "viewbymanager", "View by Manager");
-          break;
-        case "View Employees by Department":
-          fetchEmployeeBySegmentData('api/employees', "viewbydepartment", "View by Department");
-          break;
-        case "View Department by Salary":
-          fetchEmployeeBySegmentData('api/departments', "viewdeptbysalary", "View Department by Salary");
+          let viewEmployeeByManager = new Employees();
+          viewEmployeeByManager.fetchEmployeeByManager('api/employees', "viewbymanager", "View by Manager");
           break;
 
+        case "View Employees by Department":
+          let viewEmployeeByDepartment = new Employees();
+          viewEmployeeByDepartment.fetchEmployeeByDepartment('api/employees', "viewbydepartment", "View by Department");
+          break;
+
+        case "View Department by Salary":
+          let viewDepartmentbySalary = new Departments();
+          viewDepartmentbySalary.fetchDepartmentBySalary('api/departments', "viewdeptbysalary", "View Department by Salary");
+          break;
         default:
           process.exit();
     }});
@@ -245,19 +249,6 @@ renderInput = (input, type) => {
   // console.log(input, type, input.role, input.employee, inputToRender);
   
   type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : type === "delete" ? console.log(`\n${blue}Deleted ${input}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
-}
-
-//RENDER EMPLOYEE BY MANAGER OR EMPLOYEE BY DEPARTMENT
-fetchEmployeeBySegmentData = async (path, selection, renderTitle) => {
-  // console.log(path, selection, `http://localhost:3001/${path}/${selection}`);
-
-  let finalList = await axios.get(`http://localhost:3001/${path}/${selection}`);
-
-  // console.log(finalList.data);
-
-  finalList = finalList.data;
-  await tableOutput(finalList, renderTitle);
-  getWhatToDo();
 }
 
 //UTILITY FUNCTIONS
