@@ -13,19 +13,22 @@ employees.route('/')
   .post((req, res) => {
     addEmployee(req.body);
   })
-  .put((req, res) => {
-    // console.log('1 =', req);
-    console.log('put =', req.body);
-    res.send('hello');
-
-    if (req.body.role_id) {
-      updateRole(req.body);
-    } else {
-      updateManager(req.body);
-    }
-  })
   .delete((req, res) => {
     deleteEmployee(req.body);
+  })
+
+  employees.put('/update-role', (req, res) => {
+    console.log('put =', req.body);
+    res.send('hello put update role');
+
+    updateRole(req.body);
+  })
+
+  employees.put('/update-manager', (req, res) => {
+    console.log('put =', req.body);
+    res.send('hello put update manager');
+
+    updateManager(req.body);
   })
 
   employees.get('/viewbymanager', async (req, res) => {

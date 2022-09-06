@@ -89,7 +89,8 @@ getInfo = async (askQuestions, path, type) => {
     .then(() => console.log('ask question manager id = ', managerId))
     .then(() => console.log('1 = ', type, input, '3 = ', roleId, '3a = ', managerId, '4 = ', path))
     .then(() => type === "updateRole" ? (
-      axios.put(`http://localhost:3001/${path}`, {
+      // axios.put(`http://localhost:3001/${path}`, {
+      axios.put(`http://localhost:3001/${path}/update-role`, {
         id: managerId,
         role_id: roleId
         })
@@ -98,7 +99,8 @@ getInfo = async (askQuestions, path, type) => {
         })
       ) 
       : type === "updateManager" ? (
-        axios.put(`http://localhost:3001/${path}`, {
+        // axios.put(`http://localhost:3001/${path}`, {
+        axios.put(`http://localhost:3001/${path}/update-manager`, {
           employee: input.employee,
           manager_id: managerId
           })
