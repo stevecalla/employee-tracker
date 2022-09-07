@@ -61,7 +61,7 @@ const questionsUserChoice = [
     message: `What would you like to do?`,
     choices: choicesStart,
     suffix: " 🟡",
-    pageSize: 10,
+    pageSize: 12,
   },
 ];
 
