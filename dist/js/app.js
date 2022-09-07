@@ -30,15 +30,11 @@ getWhatToDo = async () => {
           addNewEmployee('api/employees', "employee");
           break;
         case "Update Employee Role":
-          let getRoleIdToUpdateRole = new Roles(); //section
-          getInfo(getUpdateEmployeeRole,'api/employees', "updateRole", getRoleIdToUpdateRole);
-
-          // getInfo(getUpdateEmployeeRole,'api/employees', "updateRole"); //todo
-          // updateEmployeeRole();
+          updateEmployeeRole('api/employees', "updateRole");
           break;
         case "Update Employee Manager":
           getInfo(getUpdateEmployeeManager,'api/employees', "updateManager");//todo
-          // updateEmployeeRole();
+ 
           break;
         case "Delete Employee":
           deleteRoleDeptEmp('api/employees', "delete", "employee");//todo
@@ -98,10 +94,33 @@ addNewEmployee = async (path, type) => {
     .then((id_1) => roleId = id_1)
     // .then(() => console.log(roleId))
     .then(() => employee.fetchEmployeeId('api/employees', input.employeeManager, type)) //fetch manager id; note input is the employeeManager
-    .then((id_3) => !id_3 ? managerId === undefined : managerId = id_3[0].id)
-    // .then(() => console.log(managerId)) //todo
+    .then((id_3) => managerId = id_3[0].id)
+    // .then(() => console.log(managerId))
     .then(() => employee.addNewEmployee(path, input, type, roleId, managerId)) //post new employee
     .then((isCurrentEmployee) => employee.renderAddEmployeeMessage(input, isCurrentEmployee)) //render message
+    .then(() => getWhatToDo()); //start over
+}
+
+
+updateEmployeeRole = async (path, type) => {
+  let role = new Roles(); //declare role
+  let employee = new Employees(); //declare manager
+
+  let input = {};
+  let roleId = 0;
+  let employeeId = 0;
+
+  await getUpdateEmployeeRole() //get data
+    .then((data) => input = data)
+    // .then(() => console.log(input))
+    .then(() => role.fetchRoleId('api/roles', input.role, type)) //fetch role id
+    .then((id_1) => roleId = id_1)
+    // .then(() => console.log(roleId))
+    .then(() => employee.fetchEmployeeId('api/employees', input.employee, type)) //fetch manager id; note input is the employee
+    .then((id_3) => employeeId = id_3[0].id)
+    // .then(() => console.log(employeeId))
+    .then(() => employee.updateEmployeeRole(path, input, type, roleId, employeeId)) //update role
+    .then(() => employee.renderUpdateRoleMessage(input)) //render message
     .then(() => getWhatToDo()); //start over
 }
 
