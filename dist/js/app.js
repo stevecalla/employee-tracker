@@ -44,7 +44,7 @@ getWhatToDo = async () => {
           viewAllRoles.fetchAllRoles('api/roles', "View All Roles");
           break;
         case "Add Role":
-          addNewRole(getRole, 'api/roles', "role");
+          addNewRole('api/roles', "role");
           break;
         case "Delete Role":
           deleteRoleDeptEmp('api/roles', "delete", "role");//todo
@@ -55,7 +55,9 @@ getWhatToDo = async () => {
           viewAllDepartments.fetchAllDepartments('api/departments', "View All Departments");
           break;
         case "Add Department":
-          getInfo(getDepartment, 'api/departments', "department");//todo
+          addNewDepartment('api/departments', "department");
+
+          // getInfo(getDepartment, 'api/departments', "department");//todo
           break;
         case "Delete Department":
           deleteRoleDeptEmp('api/departments', "delete", "department");//todo
@@ -100,7 +102,7 @@ addNewEmployee = async (path, type) => {
     .then(() => getWhatToDo()); //start over
 }
 
-addNewRole = async (getRole, path, type) => {
+addNewRole = async (path, type) => {
   let role = new Roles(); //declare role
   let department = new Departments(); //declare department
 
@@ -117,6 +119,20 @@ addNewRole = async (getRole, path, type) => {
     .then((id_2) => deptId = id_2)
     .then(() => role.addNewRole(path, input, deptId)) //post new employee
     .then((isCurrentRole) => role.renderAddRoleMessage(input, isCurrentRole)) //render message
+    .then(() => getWhatToDo()); //start over
+}
+
+addNewDepartment = async (path, type) => {
+  let department = new Departments(); //declare department
+
+  let input = {};
+  // let deptId = 0;
+
+  await getDepartment() //get data
+    .then((data) => input = data)
+    // .then(() => console.log(input))
+    .then(() => department.addNewDepartment(path, input)) //post new employee
+    .then((isCurrentDepartment) => department.renderAddDepartmentMessage(input, isCurrentDepartment)) //render message
     .then(() => getWhatToDo()); //start over
 }
 
