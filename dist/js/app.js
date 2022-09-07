@@ -44,7 +44,7 @@ getWhatToDo = async () => {
           viewAllRoles.fetchAllRoles('api/roles', "View All Roles");
           break;
         case "Add Role":
-          getInfo(getRole, 'api/roles', "role");//todo
+          addNewRole(getRole, 'api/roles', "role");
           break;
         case "Delete Role":
           deleteRoleDeptEmp('api/roles', "delete", "role");//todo
@@ -97,6 +97,26 @@ addNewEmployee = async (path, type) => {
     // .then(() => console.log(managerId))
     .then(() => employee.addNewEmployee(path, input, type, roleId, managerId)) //post new employee
     .then((isCurrentEmployee) => employee.renderAddEmployeeMessage(input, isCurrentEmployee)) //render message
+    .then(() => getWhatToDo()); //start over
+}
+
+addNewRole = async (getRole, path, type) => {
+  let role = new Roles(); //declare role
+  let department = new Departments(); //declare department
+
+  let input = {};
+  let roleId = 0;
+  let deptId = 0;
+
+  await getRole() //get data
+    .then((data) => input = data)
+    // .then(() => console.log(input))
+    .then(() => role.fetchRoleId('api/roles', input.role, type)) //fetch role id
+    .then((id_1) => roleId = id_1)
+    .then(() => department.fetchDepartmentId('api/departments', input.roleDepartment, type)) //fetch department id
+    .then((id_2) => deptId = id_2)
+    .then(() => role.addNewRole(path, input, deptId)) //post new employee
+    .then((isCurrentRole) => role.renderAddRoleMessage(input, isCurrentRole)) //render message
     .then(() => getWhatToDo()); //start over
 }
 
@@ -240,24 +260,24 @@ postAllData = async (path, input, type, roleId, deptId, managerId) => {
 
   switch (type) {
     case "role":
-      //CHECK IF ROLE ALREADY EXISTS
-      let roleExists = await fetchRoleId('api/roles', input.role, "employee");
+      // //CHECK IF ROLE ALREADY EXISTS
+      // let roleExists = await fetchRoleId('api/roles', input.role, "employee");
 
-      // console.log('role exists = ', roleExists);
+      // // console.log('role exists = ', roleExists);
 
-      //IF ROLE DOES NOT EXIST THEN INSERT
-      if (roleExists === 0) {
-        // console.log('bbbbb =', input.role, input.salary, deptId)
+      // //IF ROLE DOES NOT EXIST THEN INSERT
+      // if (roleExists === 0) {
+      //   // console.log('bbbbb =', input.role, input.salary, deptId)
 
-        axios.post(`http://localhost:3001/api/roles`, {
-          role: input.role,
-          salary: input.salary,
-          department_id: deptId
-        })
-        .catch(function (error) {
-          // console.log(error);
-        });
-      }
+      //   axios.post(`http://localhost:3001/api/roles`, {
+      //     role: input.role,
+      //     salary: input.salary,
+      //     department_id: deptId
+      //   })
+      //   .catch(function (error) {
+      //     // console.log(error);
+      //   });
+      // }
       break;
     // case "employee":
     //   //CHECK IF EMPLOYEE ALREADY EXISTS
