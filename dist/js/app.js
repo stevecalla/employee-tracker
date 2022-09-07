@@ -27,10 +27,13 @@ getWhatToDo = async () => {
           viewAllEmployees.fetchAllEmployees('api/employees', "View All Employees");
           break;
         case "Add Employee":
-          getInfo(getEmployee, 'api/employees', "employee"); //todo
+          addNewEmployee('api/employees', "employee");
           break;
         case "Update Employee Role":
-          getInfo(getUpdateEmployeeRole,'api/employees', "updateRole"); //todo
+          let getRoleIdToUpdateRole = new Roles(); //section
+          getInfo(getUpdateEmployeeRole,'api/employees', "updateRole", getRoleIdToUpdateRole);
+
+          // getInfo(getUpdateEmployeeRole,'api/employees', "updateRole"); //todo
           // updateEmployeeRole();
           break;
         case "Update Employee Manager":
@@ -67,12 +70,10 @@ getWhatToDo = async () => {
           let viewEmployeeByManager = new Employees();
           viewEmployeeByManager.fetchEmployeeByManager('api/employees', "viewbymanager", "View by Manager");
           break;
-
         case "View Employees by Department":
           let viewEmployeeByDepartment = new Employees();
           viewEmployeeByDepartment.fetchEmployeeByDepartment('api/employees', "viewbydepartment", "View by Department");
           break;
-
         case "View Department by Salary":
           let viewDepartmentbySalary = new Departments();
           viewDepartmentbySalary.fetchDepartmentBySalary('api/departments', "viewdeptbysalary", "View Department by Salary");
@@ -82,25 +83,58 @@ getWhatToDo = async () => {
     }});
 };
 
+addNewEmployee = async (path, type) => {
+  let role = new Roles(); //declare role
+  let employee = new Employees(); //declare manager
+
+  let input = {};
+  let roleId = 0;
+  let managerId = 0;
+
+  await getEmployee() //get data
+    .then((data) => input = data)
+    // .then(() => console.log(input))
+    .then(() => role.fetchRoleId('api/roles', input.role, type)) //fetch role id
+    .then((id_1) => roleId = id_1)
+    // .then(() => console.log(roleId))
+    .then(() => employee.fetchEmployeeId('api/employees', input.employeeManager, type)) //fetch manager id; note input is the employeeManager
+    .then((id_3) => !id_3 ? managerId === undefined : managerId = id_3[0].id)
+    // .then(() => console.log(managerId)) //todo
+    .then(() => employee.addNewEmployee(path, input, type, roleId, managerId)) //post new employee
+    .then((isCurrentEmployee) => employee.renderAddEmployeeMessage(input, isCurrentEmployee)) //render message
+    .then(() => getWhatToDo()); //start over
+}
+
 // ASK USER TO INPUT EMPLOYEE, ROLE, DEPARTMENT OR ROLE UPDATE; PASS IN ASKQUESTION FUNCTION, TYPE OF QUESTION. RETURN TO THE GETWHATTODO FUNCTION
-getInfo = async (askQuestions, path, type) => {
+getInfo = async (askQuestions, path, type, classMethod) => {
   let input = {};
   let roleId = 0;
   let deptId = 0;
   let managerId = 0;
 
+  console.log((askQuestions, path, type, classMethod));
+
   await askQuestions()
     .then((data) => input = data)
     // .then(() => console.log('INPUT = ', input))
-    .then(() => fetchRoleId('api/roles', input.role, type))
+
+    // .then(() => fetchRoleId('api/roles', input.role, type))
+
+    //NEED ROLE ID TO ADD A NEW EMPLOYEE OR UPDATE ROLE
+    .then(() => (type === 'employee' || type === "updateRole") ? classMethod.fetchRoleId('api/roles', input.role, type) : console.log('NOOOOO')) //section
+
     .then((id_1) => roleId = id_1)
     .then(() => fetchDepartmentId('api/departments', input.roleDepartment, type))
     .then((id_2) => deptId = id_2)
-    .then(() => type === "updateRole" ? fetchManagerId('api/employees', input.employee, type) : fetchManagerId('api/employees', input.employeeManager, type) )
+
+    .then(() => type === "updateRole" ? fetchManagerId('api/employees', input.employee, type) : type === 'employee' || type === 'updateRole' ? fetchManagerId('api/employees', input.employeeManager, type) : console.log('not necessary'))
+
     .then((id_3) => !id_3 ? managerId === undefined : managerId = id_3[0].id)
+
     // .then(() => console.log('ask question manager id = ', managerId))
     // .then(() => console.log('1 = ', type, input, '3 = ', roleId, '3a = ', managerId, '4 = ', path))
-    .then(() => type === "updateRole" ? (
+
+    .then(() => (type === "updateRole") ? (
       // axios.put(`http://localhost:3001/${path}`, {
       axios.put(`http://localhost:3001/${path}/update-role`, {
         id: managerId,
@@ -142,29 +176,25 @@ fetchManagerId = async (path, employeeManager, type) => {
   // console.log('FETCH MGR = ', path, employeeManager, type);
   // console.log('FETCH PATH = ', `http://localhost:3001/${path}/${employeeManager}`);
 
-  if (type === 'employee' || type === 'updateRole' || type === 'updateManager') {
+  // if (type === 'employee' || type === 'updateRole' || type === 'updateManager') {
     let getEmployee = await axios.get(`http://localhost:3001/${path}/${employeeManager}`);
-    // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
 
     let employee = getEmployee.data;
-
-    // console.log('1) employee = ', getEmployee.data)
-
     return employee;
-  }
+  // }
 }
 
 //FETCHING MANAGER ID TO USE WHEN ADDING A NEW EMPLOYEE
-fetchRoleId = async (path, role, type) => {
-  // console.log('FETCH ROLE = ', path, role, type);
-  // console.log('FETCH PATH = ', `http://localhost:3001/${path}/${role}`);
+// fetchRoleId = async (path, role, type) => {
+//   // console.log('FETCH ROLE = ', path, role, type);
+//   // console.log('FETCH PATH = ', `http://localhost:3001/${path}/${role}`);
 
-  if (type === 'employee' || type === 'updateRole') {
-    let roleId = await axios.get(`http://localhost:3001/${path}/${role}`);
-    // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
-    return roleId.data;
-  }
-}
+//   if (type === 'employee' || type === 'updateRole') {
+//     let roleId = await axios.get(`http://localhost:3001/${path}/${role}`);
+//     // let test =  await axios.get(`http://localhost:3001/api/roles/Lawyer`);
+//     return roleId.data;
+//   }
+// }
 
 postAllData = async (path, input, type, roleId, deptId, managerId) => {
   // console.log('POST = ', input, 'TYPE =', type, 'ROLE ID = ', roleId,  'DEPT ID = ', deptId, 'MGR ID = ', managerId);
@@ -190,28 +220,28 @@ postAllData = async (path, input, type, roleId, deptId, managerId) => {
         });
       }
       break;
-    case "employee":
-      //CHECK IF EMPLOYEE ALREADY EXISTS
-      let employeeExists = await fetchManagerId('api/employees', `${input.firstName} ${input.lastName}`, "employee");
+    // case "employee":
+    //   //CHECK IF EMPLOYEE ALREADY EXISTS
+    //   let employeeExists = await fetchManagerId('api/employees', `${input.firstName} ${input.lastName}`, "employee");
 
-      // console.log('employee exists = ', employeeExists);
+    //   // console.log('employee exists = ', employeeExists);
 
-      //IF EMPLOYEE DOES NOT EXIST THEN INSERT
-      if (employeeExists === 0) {
-        // console.log('bbbbb =', input.firstName, input.lastName, roleId, managerId)
+    //   //IF EMPLOYEE DOES NOT EXIST THEN INSERT
+    //   if (employeeExists === 0) {
+    //     // console.log('bbbbb =', input.firstName, input.lastName, roleId, managerId)
 
-        axios.post(`http://localhost:3001/api/employees`, {
-          first_name: input.firstName,
-          last_name: input.lastName,
-          role_id: roleId,
-          manager_id: managerId
-        })
-        .catch(function (error) {
-          // console.log(error);
-        });
+    //     axios.post(`http://localhost:3001/api/employees`, {
+    //       first_name: input.firstName,
+    //       last_name: input.lastName,
+    //       role_id: roleId,
+    //       manager_id: managerId
+    //     })
+    //     .catch(function (error) {
+    //       // console.log(error);
+    //     });
 
-      }
-      break;
+    //   }
+    //   break;
     default:
       //CHECK IF DEPARTMENT ALREADY EXISTS
       let deptExists = await fetchDepartmentId('api/departments', input.department, 'role');
@@ -248,7 +278,7 @@ renderInput = (input, type) => {
 
   // console.log(input, type, input.role, input.employee, inputToRender);
   
-  type === "updateRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : type === "delete" ? console.log(`\n${blue}Deleted ${input}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
+  type === "getRole" ? console.log(`\n${blue}Updated ${input.employee}'s role to ${input.role}`) : type === "delete" ? console.log(`\n${blue}Deleted ${input}`) : console.log(`\n${blue}Added ${inputToRender} to the database.`)
 }
 
 //UTILITY FUNCTIONS

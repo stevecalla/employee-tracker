@@ -26,8 +26,8 @@ getRole = () => {
   return addRole;
 };
 
-getEmployee = () => {
-  const addEmployee = inquirer.prompt(questionsAddEmployee);
+getEmployee = async () => {
+  const addEmployee = await inquirer.prompt(questionsAddEmployee);
   return addEmployee;
 };
 

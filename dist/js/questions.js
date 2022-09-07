@@ -125,7 +125,7 @@ const questionsAddRole = [ // maps to Add Role
 
 const questionsAddEmployee = [
   {
-    prefix: "⠋🟡 1 of 6)",
+    prefix: "⠋🟡 1 of 4)",
     type: "input",
     name: "firstName",
     message: `${white}Enter the ${blue}first${white} name?`,
@@ -139,7 +139,7 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 2 of 6)",
+    prefix: "⠋🟡 2 of 4)",
     type: "input",
     name: "lastName",
     message: `${white}Enter the ${blue}last${white} name?`,
@@ -153,51 +153,21 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 3 of 6)",
+    prefix: "⠋🟡 3 of 4)",
     type: "rawlist",
     name: "role",
     message: `${white}Enter the ${blue}employee's role${white}?`,
     choices: choicesRoles,
-    // default: "Lawyer",
     suffix: " 🟡",
-    // validate(answer) {
-    //   return isBlank(answer, "the role");
-    // },
-    // filter(answer) {
-    //   return capitalizeFirstCharacter(answer);
-    // },
   },
   {
-    prefix: "⠋🟡 4 of 6)",
+    prefix: "⠋🟡 4 of 4)",
     type: "rawlist",
     name: "employeeManager",
     message: `${white}Enter the ${blue}employee's manager${white}?`,
     choices: choicesEmployees,
     suffix: " 🟡",
   },
-  // {
-  //   prefix: "⠋🟡 5 of 6)",
-  //   name: "employeeId",
-  //   type: "input",
-  //   message: `\u001b[0;1mEnter the ${blue}employee ID${white}?`,
-  //   default: "1",
-  //   validate(answer) {
-  //     return isNumber(answer);
-  //   },
-  //   filter(answer) {
-  //     return answer;
-  //   },
-  // },
-  // {
-  //   prefix: "⠋🟡 6 of 6)",
-  //   name: "emailAddress",
-  //   type: "input",
-  //   message: `${white}Enter the ${blue}email address${white}?`,
-  //   default: "callasteven@gmail.com",
-  //   validate(answer) {
-  //     return isEmail(answer);
-  //   },
-  // },
 ];
 
 const questionsUpdateEmployeeRole = [ // maps to Add Role
