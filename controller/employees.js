@@ -1,51 +1,61 @@
-const { db } = require('../db/database');
+const { db } = require("../db/database");
 
 const getEmployees = async () => {
   let result = await db.awaitQuery(employeeTableSQL);
   return result;
-}
+};
 
 const addEmployee = async (req) => {
-  db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${req.first_name}", "${req.last_name}", "${req.role_id}", "${req.manager_id}")`);
-}
+  db.query(
+    `INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${req.first_name}", "${req.last_name}", "${req.role_id}", "${req.manager_id}")`
+  );
+};
 
 const updateManager = async (req) => {
-  let first_name = req.employee.split(' ')[0];
-  let last_name = req.employee.split(' ')[1];
+  let first_name = req.employee.split(" ")[0];
+  let last_name = req.employee.split(" ")[1];
 
-  db.query(`UPDATE employees SET manager_id = ${req.manager_id} WHERE first_name = "${first_name}" and last_name = "${last_name}"`);
-}
+  db.query(
+    `UPDATE employees SET manager_id = ${req.manager_id} WHERE first_name = "${first_name}" and last_name = "${last_name}"`
+  );
+};
 
 const updateRole = async (req) => {
-  db.query(`UPDATE employees SET role_id = ${req.role_id} WHERE id = ${req.id}`);
-}
+  db.query(
+    `UPDATE employees SET role_id = ${req.role_id} WHERE id = ${req.id}`
+  );
+};
 
 const deleteEmployee = (req) => {
-  let first_name = req.employee.split(' ')[0];
-  let last_name = req.employee.split(' ')[1];
+  let first_name = req.employee.split(" ")[0];
+  let last_name = req.employee.split(" ")[1];
 
-  db.query(`DELETE FROM employees WHERE first_name = "${first_name}" and last_name = "${last_name}"`);
-}
+  db.query(
+    `DELETE FROM employees WHERE first_name = "${first_name}" and last_name = "${last_name}"`
+  );
+};
 
 const getEmployeeId = async (req) => {
-  let first_name = req.manager.split(' ')[0];
-  let last_name = req.manager.split(' ')[1];
+  let first_name = req.manager.split(" ")[0];
+  let last_name = req.manager.split(" ")[1];
 
-  let result = await db.awaitQuery(`SELECT * FROM employees WHERE first_name = "${first_name}" AND last_name = "${last_name}"`);
+  let result = await db.awaitQuery(
+    `SELECT * FROM employees WHERE first_name = "${first_name}" AND last_name = "${last_name}"`
+  );
 
-  result.length !== 0 ? result = result : result = 0;
+  result.length !== 0 ? (result = result) : (result = 0);
   return result;
-}
+};
 
 const getEmployeesByManager = async () => {
   let result = await db.awaitQuery(employeeByManagerSQL);
   return result;
-}
+};
 
 const getEmployeesByDepartment = async () => {
   let result = await db.awaitQuery(employeeByDepartmentSQL);
   return result;
-}
+};
 
 const employeeTableSQL = `
   SELECT
@@ -105,4 +115,4 @@ module.exports = {
   getEmployeesByDepartment,
   updateManager,
   updateRole,
-}
+};

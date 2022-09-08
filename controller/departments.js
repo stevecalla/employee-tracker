@@ -1,28 +1,30 @@
-const { db } = require('../db/database');
+const { db } = require("../db/database");
 
 const getDepartments = async () => {
   let result = await db.awaitQuery(deptTableSQL);
   return result;
-}
+};
 
 const getDepartmentId = async (department) => {
-  let result = await db.awaitQuery(`SELECT id FROM departments WHERE name = "${department}"`);
-  result.length !== 0 ? result = result[0].id : result = 0;
+  let result = await db.awaitQuery(
+    `SELECT id FROM departments WHERE name = "${department}"`
+  );
+  result.length !== 0 ? (result = result[0].id) : (result = 0);
   return result;
-}
+};
 
 const getDeptBySalary = async () => {
   let result = await db.awaitQuery(departmentBySalarySQL);
   return result;
-}
+};
 
 const addDepartment = async (departmentName) => {
   db.query(`INSERT INTO departments(name) VALUES ("${departmentName}")`);
-}
+};
 
 const deleteDepartment = (department) => {
   db.query(`DELETE FROM departments WHERE name = "${department}"`);
-}
+};
 
 const deptTableSQL = `
   SELECT
@@ -54,5 +56,5 @@ module.exports = {
   getDeptBySalary,
   getDepartmentId,
   addDepartment,
-  deleteDepartment
-}
+  deleteDepartment,
+};

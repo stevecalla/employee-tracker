@@ -1,4 +1,4 @@
-const { capitalizeFirstCharacter, lowerCase } = require("../lib/util.js");
+const { capitalizeFirstCharacter, lowerCase } = require("../helpers/util");
 
 describe("Capitalize", () => {
   it("should capitalize first char and lower case other char of one word string", () => {
@@ -32,9 +32,15 @@ describe("Is Number", () => {
     let test4 = "3";
     let test5 = "4526";
 
-    expect(isNumber(test1)).toBe("Please provide a number (with no letters, commas, periods).");
-    expect(isNumber(test2)).toBe("Please provide a number (with no letters, commas, periods).");
-    expect(isNumber(test3)).toBe("Please provide a number (with no letters, commas, periods).");
+    expect(isNumber(test1)).toBe(
+      "Please provide a number (with no letters, commas, periods)."
+    );
+    expect(isNumber(test2)).toBe(
+      "Please provide a number (with no letters, commas, periods)."
+    );
+    expect(isNumber(test3)).toBe(
+      "Please provide a number (with no letters, commas, periods)."
+    );
     expect(isNumber(test4)).toBe(true);
     expect(isNumber(test5)).toBe(true);
   });
