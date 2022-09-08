@@ -81,57 +81,51 @@ getWhatToDo = async () => {
 
 addNewEmployee = async (path, type) => {
   let role = new Roles(); //declare role
-  let employee = new Employees(); //declare manager
-
-  let input = {};
+  let employee = {};
   let roleId = 0;
   let managerId = 0;
 
   await getEmployee() //get data
-    .then((data) => input = data)
-    // .then(() => console.log(input))
-    .then(() => role.fetchRoleId('api/roles', input.role, type)) //fetch role id
+    .then((data) => employee = new Employees(data.firstName, data.lastName, data.role, data.employeeManager))
+    // .then(() => console.log(employee))
+    .then(() => role.fetchRoleId('api/roles', employee.getRole(), type)) //fetch role id
     .then((id_1) => roleId = id_1)
     // .then(() => console.log(roleId))
-    .then(() => employee.fetchEmployeeId('api/employees', input.employeeManager, type)) //fetch manager id; note input is the employeeManager
+    .then(() => employee.fetchEmployeeId('api/employees', employee.getManager(), type)) //fetch manager id; note input is the employeeManager
     .then((id_3) => managerId = id_3[0].id)
     // .then(() => console.log(managerId))
-    .then(() => employee.addNewEmployee(path, input, type, roleId, managerId)) //post new employee
-    .then((isCurrentEmployee) => employee.renderAddEmployeeMessage(input, isCurrentEmployee)) //render message
+    .then(() => employee.addNewEmployee(path, employee.getEmployee(), type, roleId, managerId)) //post new employee
+    .then((isCurrentEmployee) => employee.renderAddEmployeeMessage(employee.getEmployee(), isCurrentEmployee)) //render message
     .then(() => getWhatToDo()); //start over
 }
 
-addNewRole = async (path, type) => {
-  let role = new Roles(); //declare role
+addNewRole = async (path) => {
   let department = new Departments(); //declare department
 
-  let input = {};
+  let role = {};
   let roleId = 0;
   let deptId = 0;
 
   await getRole() //get data
-    .then((data) => input = data)
-    // .then(() => console.log(input))
-    .then(() => role.fetchRoleId('api/roles', input.role, type)) //fetch role id
+    .then((data) => role = new Roles(data.role, data.salary, data.roleDepartment))
+    .then(() => console.log(role, role.getRole()))
+    .then(() => role.fetchRoleId(path, role.getTitle())) //fetch role id
     .then((id_1) => roleId = id_1)
-    .then(() => department.fetchDepartmentId('api/departments', input.roleDepartment, type)) //fetch department id
+    .then(() => department.fetchDepartmentId('api/departments', role.getDepartment())) //fetch department id
     .then((id_2) => deptId = id_2)
-    .then(() => role.addNewRole(path, input, deptId)) //post new employee
-    .then((isCurrentRole) => role.renderAddRoleMessage(input, isCurrentRole)) //render message
+    .then(() => role.addNewRole(path, role.getRole(), deptId)) //post new employee
+    .then((isCurrentRole) => role.renderAddRoleMessage(role.getRole(), isCurrentRole)) //render message
     .then(() => getWhatToDo()); //start over
 }
 
-addNewDepartment = async (path, type) => {
-  let department = new Departments(); //declare department
-
-  let input = {};
-  // let deptId = 0;
+addNewDepartment = async (path) => {
+  let department = {};
 
   await getDepartment() //get data
-    .then((data) => input = data)
-    // .then(() => console.log(input))
-    .then(() => department.addNewDepartment(path, input)) //post new employee
-    .then((isCurrentDepartment) => department.renderAddDepartmentMessage(input, isCurrentDepartment)) //render message
+    .then((data) => department = new Departments(data.department))
+    // .then(() => console.log(department, department.getDepartment()))
+    .then(() => department.addNewDepartment(path, department.getDepartment())) //post new employee
+    .then((isCurrentDepartment) => department.renderAddDepartmentMessage(department.getDepartment(), isCurrentDepartment)) //render message
     .then(() => getWhatToDo()); //start over
 }
 
