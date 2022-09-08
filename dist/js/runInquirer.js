@@ -41,18 +41,20 @@ getUpdateEmployeeManager = () => {
   return updateEmployeeManager;
 };
 
-getDeleteRoleDeptEmp = async (list) => {
-  if (list === "department") {
-    const deleteDepartment = await inquirer.prompt(questionsDeleteDepartment);
-    return deleteDepartment;
-  } else if (list === "employee") {
-    const deleteEmployee = inquirer.prompt(questionsDeleteEmployee);
-    return deleteEmployee;
-  } else {
-    const deleteRole = await inquirer.prompt(questionsDeleteRole);
-    return deleteRole;
-  };
-};
+getDeleteEmployee = () => {
+  const deleteEmployee = inquirer.prompt(questionsDeleteEmployee);
+  return deleteEmployee;
+}
+
+getDeleteRole = () => {
+  const deleteRole = inquirer.prompt(questionsDeleteRole);
+  return deleteRole;
+}
+
+getDeleteDepartment = () => {
+  const deleteDepartment = inquirer.prompt(questionsDeleteDepartment);
+  return deleteDepartment;
+}
 
 module.exports = {
   getUserChoice,
@@ -61,5 +63,7 @@ module.exports = {
   getEmployee,
   getUpdateEmployeeRole,
   getUpdateEmployeeManager,
-  getDeleteRoleDeptEmp,
+  getDeleteEmployee,
+  getDeleteRole,
+  getDeleteDepartment
 };

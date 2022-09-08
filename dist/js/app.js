@@ -6,6 +6,9 @@ const {
   getUpdateEmployeeRole,
   getUpdateEmployeeManager,
   getDeleteRoleDeptEmp,
+  getDeleteEmployee,
+  getDeleteRole,
+  getDeleteDepartment
 
 } = require("./runInquirer");
 const { banner } = require("./banner");
@@ -15,7 +18,6 @@ const axios = require('axios');
 const Departments = require('../../lib/Departments');
 const Roles = require('../../lib/Roles');
 const Employees = require('../../lib/Employees');
-// const { questionsDeleteDepartment } = require("./questions");
 
 //ASK USER WHAT ACTION TO PERFORM
 getWhatToDo = async () => {
@@ -28,16 +30,16 @@ getWhatToDo = async () => {
           viewAllEmployees.fetchAllEmployees('api/employees', "View All Employees");
           break;
         case "Add Employee":
-          addNewEmployee('api/employees', "employee");
+          addNewEmployee('api/employees');
           break;
         case "Update Employee Role":
-          updateEmployeeRole('api/employees', "updateRole");
+          updateEmployeeRole('api/employees');
           break;
         case "Update Employee Manager":
-          updateEmployeeManager('api/employees', "updateRole");
+          updateEmployeeManager('api/employees');
           break;
         case "Delete Employee":
-          deleteCurrentEmployee('api/employees', "employee");
+          deleteCurrentEmployee('api/employees');
           break;
 
         case "View All Roles":
@@ -48,7 +50,7 @@ getWhatToDo = async () => {
           addNewRole('api/roles', "role");
           break;
         case "Delete Role":
-          deleteCurrentRole('api/roles', "role");
+          deleteCurrentRole('api/roles');
           break;
 
         case "View All Departments":
@@ -59,7 +61,7 @@ getWhatToDo = async () => {
           addNewDepartment('api/departments', "department");
           break;
         case "Delete Department":
-          deleteCurrentDepartment('api/departments', "department");
+          deleteCurrentDepartment('api/departments');
           break;
 
         case "View Employees by Manager":
@@ -79,7 +81,7 @@ getWhatToDo = async () => {
     }});
 };
 
-addNewEmployee = async (path, type) => {
+addNewEmployee = async (path) => {
   let role = new Roles(); //declare role
   let employee = {};
   let roleId = 0;
@@ -88,13 +90,13 @@ addNewEmployee = async (path, type) => {
   await getEmployee() //get data
     .then((data) => employee = new Employees(data.firstName, data.lastName, data.role, data.employeeManager))
     // .then(() => console.log(employee))
-    .then(() => role.fetchRoleId('api/roles', employee.getRole(), type)) //fetch role id
+    .then(() => role.fetchRoleId('api/roles', employee.getRole())) //fetch role id
     .then((id_1) => roleId = id_1)
     // .then(() => console.log(roleId))
-    .then(() => employee.fetchEmployeeId('api/employees', employee.getManager(), type)) //fetch manager id; note input is the employeeManager
+    .then(() => employee.fetchEmployeeId('api/employees', employee.getManager())) //fetch manager id; note input is the employeeManager
     .then((id_3) => managerId = id_3[0].id)
     // .then(() => console.log(managerId))
-    .then(() => employee.addNewEmployee(path, employee.getEmployee(), type, roleId, managerId)) //post new employee
+    .then(() => employee.addNewEmployee(path, employee.getEmployee(), roleId, managerId)) //post new employee
     .then((isCurrentEmployee) => employee.renderAddEmployeeMessage(employee.getEmployee(), isCurrentEmployee)) //render message
     .then(() => getWhatToDo()); //start over
 }
@@ -129,7 +131,7 @@ addNewDepartment = async (path) => {
     .then(() => getWhatToDo()); //start over
 }
 
-updateEmployeeRole = async (path, type) => {
+updateEmployeeRole = async (path) => {
   let role = new Roles(); //declare role
 
   let employee = {};
@@ -139,10 +141,10 @@ updateEmployeeRole = async (path, type) => {
   await getUpdateEmployeeRole() //get data
     .then((data) => employee = new Employees(data.employee.split(' ')[0], data.employee.split(' ')[1], data.role))
     // .then(() => console.log(employee, ))
-    .then(() => role.fetchRoleId('api/roles', employee.getRole(), type)) //fetch role id
+    .then(() => role.fetchRoleId('api/roles', employee.getRole())) //fetch role id
     .then((id_1) => roleId = id_1)
     // .then(() => console.log('role = ', roleId))
-    .then(() => employee.fetchEmployeeId('api/employees', employee.getFullName(), type)) //fetch manager id; note input is the employee
+    .then(() => employee.fetchEmployeeId('api/employees', employee.getFullName())) //fetch manager id; note input is the employee
     .then((id_3) => employeeId = id_3[0].id)
     // .then(() => console.log(employeeId))
     .then(() => employee.updateEmployeeRole(path, roleId, employeeId)) //update role
@@ -150,7 +152,7 @@ updateEmployeeRole = async (path, type) => {
     .then(() => getWhatToDo()); //start over
 }
 
-updateEmployeeManager = async (path, type) => {
+updateEmployeeManager = async (path) => {
   let role = new Roles(); //declare role
 
   let employee =  {};
@@ -160,10 +162,10 @@ updateEmployeeManager = async (path, type) => {
   await getUpdateEmployeeManager() //get data
     .then((data) => employee = new Employees(data.employee.split(' ')[0], data.employee.split(' ')[1], "", data.employeeManager))
     // .then(() => console.log(employee))
-    .then(() => role.fetchRoleId('api/roles', employee.getRole(), type)) //fetch role id
+    .then(() => role.fetchRoleId('api/roles', employee.getRole())) //fetch role id
     .then((id_1) => roleId = id_1)
     // .then(() => console.log(roleId))
-    .then(() => employee.fetchEmployeeId('api/employees', employee.getManager(), type)) //fetch manager id; note input is the employeeManager
+    .then(() => employee.fetchEmployeeId('api/employees', employee.getManager())) //fetch manager id; note input is the employeeManager
     .then((id_3) => managerId = id_3[0].id)
     // .then(() => console.log(managerId, employee.getFullName()))
     .then(() => employee.updateEmployeeManager(path, employee.getFullName(), managerId)) //update role
@@ -171,41 +173,42 @@ updateEmployeeManager = async (path, type) => {
     .then(() => getWhatToDo()); //start over
 }
 
-tableOutput = (data, selection = "Hello") => {
+renderTableOutput = (data, selection = "Hello") => {
   let lineBreak = `\n`;
   let title = `----------- ${selection} -----------`;
+
   console.log(`${blue}${lineBreak}${title}${white}${lineBreak}`);
   console.table(data);
   console.log(`${blue}${title}${white}`);
 };
 
-deleteCurrentEmployee = async (path, list) => {
+deleteCurrentEmployee = async (path) => {
   let employee = new Employees(); //declare employee
 
-  await getDeleteRoleDeptEmp(list)
+  await getDeleteEmployee()
   .then((data) => input = data)
-  .then(() => employee.deleteEmployee(path, input, list))
-  .then(() => employee.renderDeleteEmployeeMessage(input[list]))
+  .then(() => employee.deleteEmployee(path, input))
+  .then(() => employee.renderDeleteEmployeeMessage(input.employee))
   .then(() => getWhatToDo())
 }
 
-deleteCurrentRole = async (path, list) => {
+deleteCurrentRole = async (path) => {
   let role = new Roles(); //declare role
 
-  await getDeleteRoleDeptEmp(list)
+  await getDeleteRole()
   .then((data) => input = data)
-  .then(() => role.deleteRole(path, input, list))
-  .then(() => role.renderDeleteRoleMessage(input[list]))
+  .then(() => role.deleteRole(path, input))
+  .then(() => role.renderDeleteRoleMessage(input.role))
   .then(() => getWhatToDo())
 }
 
-deleteCurrentDepartment = async (path, list) => {
+deleteCurrentDepartment = async (path) => {
   let department = new Departments(); //declare department
 
-  await getDeleteRoleDeptEmp(list)
+  await getDeleteDepartment()
   .then((data) => input = data)
-  .then(() => department.deleteDepartment(path, input, list))
-  .then(() => department.renderDeleteDepartmentMessage(input[list]))
+  .then(() => department.deleteDepartment(path, input))
+  .then(() => department.renderDeleteDepartmentMessage(input.department))
   .then(() => getWhatToDo())
 }
 
