@@ -15,25 +15,20 @@
 ## Description
 
 ```
-TBD
+This app is a command-line interface (CLI) that allows a company to view and manage the departments, roles and employees. At the command line the user can generate reports showing all deparments, roles, employees, employees by role, employees by manager, salary by department as well as add, delete departments, roles, employees and update an employees role or manager. 
 ```
 
 ## Installation
 
-TBD
-
-jest = npm test
-inquirer = node index.js
-mysql = tbd
-console.table = tbd
+(1) Fork the repo, (2) Clone the forked repo locally, (3) Run "npm install" (to install the dependencies), (4) Run "node server.js" to start the server (from the root directory), (6) Run "node.index.js" to start the employee tracker CLI.
 
 ## Usage
 
-TBD
+If you'd like to use NPM nodemon as/if you make changes to the code, please install nodemon as a development dependency using "npm install --save-dev nodemon" (see https://www.npmjs.com/package//nodemon).This CLI allows a user to view and manage the departments, roles and employees of a company.
 
 ## Features
 
-TBD
+This app includes features such as (a) the ability to generate reports showing all deparments, roles, employees, employees by role, employees by manager, salary by department, (b) add, delete departments, roles, employees, and (c) update an employees role or manager.
 <!-- 
 1. TBD
 2. TBD
@@ -41,7 +36,7 @@ TBD
 -->
 ## Future Enhancements
 
-TBD
+This app can be enhanced by (a) using/adding dates such as created at, updated at, deleted at to track information by time, (b) add soft and hard delete options so users can recover changes if necessary, (c) add the ability to manage middle names, (d) add more fields for employees or roles such as employee salary, date of birth, social security number (secured in some manner), email address, position start date and more, (e) add ka secure password for the mysql database connection, and (f) add additional testing.
 <!-- 
 1. TBD
 2. TBD
@@ -50,17 +45,17 @@ TBD
 
 ## App Preview - Static Screenshot
 
-<img alt="" src="./dist/images/webpage-static-image.png" width="100%" height="425"/>
+<img alt="" src="./dist/images/static-image.jpeg" width="100%" height="425"/>
 
 
-## App Preview - Video Preview 
+## App Preview - Video Preview
 [Link to Video](https://www.youtube.com/watch?v=_hr9SKZC5Rc&feature=youtu.be)
 
-<img alt="" src="./dist/images/app-video-demo.gif" width="100%" height="425"/>
+<img alt="" src="./dist/images/app-video.jpeg" width="100%" height="425"/>
 
 ## Tests
 
-To run Jest tests, run "npm test". Jest is setup to use a "--watch" and to provide "--coverage" statistics.
+No tests are setup at this time.
 
 ## Contributing
 
@@ -76,9 +71,9 @@ Contributor Covenant Code of Conduct
 
 ## Resources
 
-1. GitHub Repo: <https://github.com/stevecalla/employee-tracker>
-2. GitHub/Heroku Hosted URL: Not applicable as this is a command line interface.
-3. Project Manager: [Steve Calla - GitHub Profile](https://github.com/stevecalla)
+1. Project Manager: [Steve Calla - GitHub Profile](https://github.com/stevecalla)
+2. GitHub Repo: <https://github.com/stevecalla/employee-tracker>
+3. GitHub Hosted URL: <None. This is command-line interface (CLI) using node.js.>
 4. Contact: [Email Steve](mailto:callasteven@gmail.com)
 
 ## License 
