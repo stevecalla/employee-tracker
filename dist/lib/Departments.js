@@ -90,7 +90,7 @@ class Departments {
   }
 
   //RENDER MESSAGE TO CONFIRM DEPARTMENT ADDED
-  renderAddDepartmentMessage({ department }, isCurrentDepartment) {
+  renderAddDepartmentMessage(department, isCurrentDepartment) {
     if (isCurrentDepartment) {
       console.log(
         `\n${blue}Did not add ${department}. This department already exists in the database.`
