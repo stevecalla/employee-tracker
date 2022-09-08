@@ -1,52 +1,67 @@
 const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../lib/util");
 const axios = require('axios');
+const inquirer = require("inquirer");
+const Departments = require('../../lib/Departments');
+const Roles = require('../../lib/Roles');
+const Employees = require('../../lib/Employees');
 
 choicesStart = [
+  new inquirer.Separator(`-- Employees --`),
   "View All Employees",
   "Add Employee", // see questionsAddEmployee
   "Update Employee Role", // see questionsUpdateEmployee Role
+  "Update Employee Manager",
+  "Delete Employee",
+  new inquirer.Separator(`-- Roles --`),
 
-  "Update Employee Manager", //todo
-  
   "View All Roles",
   "Add Role", // see questionsAddRole
+  "Delete Role",
+  new inquirer.Separator(`-- Departments --`),
+  
   "View All Departments",
   "Add Department", // see questionsAddDepartment
-  "View Employees by Manager", //todo:DONE
-  "View Employees by Department", //todo:DONE
-  "View Department by Salary", //todo
-  "Delete Role", //todo:DONE
-  "Delete Department", //todo:DONE
-  "Delete Employee", //todo:DONE
+  "Delete Department", 
+  new inquirer.Separator(`-- Reports --`),
+
+  "View Employees by Manager",
+  "View Employees by Department",
+  "View Department by Salary",
+  new inquirer.Separator(`-- Quit --`),
+  
   "Quit",
 ];
 
 choicesDepartments = async () => {
-  let departmentData = await axios.get(`http://localhost:3001/api/departments`);
-  let departments = departmentData.data.map(element => element.Department);
+  let viewDepartmentsList = new Departments();
+  let deparmentsData = await viewDepartmentsList.fetchDepartmentsList('api/departments');
+  let departments = deparmentsData.data.map(element => element.Department);
   return departments;
 }
 
 choicesRoles = async () => {
-  let rolesData = await axios.get(`http://localhost:3001/api/roles`);
+  let viewRolesList = new Roles();
+  let rolesData = await viewRolesList.fetchRolesList('api/roles');
   let roles = rolesData.data.map(element => element.Title);
   return roles;
 }
 
 choicesEmployees = async () => {
-  let employeesData = await axios.get(`http://localhost:3001/api/employees`);
+  let viewEmployeesList = new Employees();
+  let employeesData = await viewEmployeesList.fetchEmployeesList('api/employees');
   let employees = employeesData.data.map(element => `${element.First_Name} ${element.Last_Name}`);
   return employees;
 }
 
 const questionsUserChoice = [
   {
-    prefix: "\n⠋🟡",
+    prefix: `${white}\n⠋🟡`,
     type: "rawlist",
     name: "userSelection",
-    message: `${white}What would you like to do?`,
+    message: `What would you like to do?`,
     choices: choicesStart,
     suffix: " 🟡",
+    pageSize: 12,
   },
 ];
 
@@ -110,7 +125,7 @@ const questionsAddRole = [ // maps to Add Role
 
 const questionsAddEmployee = [
   {
-    prefix: "⠋🟡 1 of 6)",
+    prefix: "⠋🟡 1 of 4)",
     type: "input",
     name: "firstName",
     message: `${white}Enter the ${blue}first${white} name?`,
@@ -124,7 +139,7 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 2 of 6)",
+    prefix: "⠋🟡 2 of 4)",
     type: "input",
     name: "lastName",
     message: `${white}Enter the ${blue}last${white} name?`,
@@ -138,51 +153,21 @@ const questionsAddEmployee = [
     },
   },
   {
-    prefix: "⠋🟡 3 of 6)",
+    prefix: "⠋🟡 3 of 4)",
     type: "rawlist",
     name: "role",
     message: `${white}Enter the ${blue}employee's role${white}?`,
     choices: choicesRoles,
-    // default: "Lawyer",
     suffix: " 🟡",
-    // validate(answer) {
-    //   return isBlank(answer, "the role");
-    // },
-    // filter(answer) {
-    //   return capitalizeFirstCharacter(answer);
-    // },
   },
   {
-    prefix: "⠋🟡 4 of 6)",
+    prefix: "⠋🟡 4 of 4)",
     type: "rawlist",
     name: "employeeManager",
     message: `${white}Enter the ${blue}employee's manager${white}?`,
     choices: choicesEmployees,
     suffix: " 🟡",
   },
-  // {
-  //   prefix: "⠋🟡 5 of 6)",
-  //   name: "employeeId",
-  //   type: "input",
-  //   message: `\u001b[0;1mEnter the ${blue}employee ID${white}?`,
-  //   default: "1",
-  //   validate(answer) {
-  //     return isNumber(answer);
-  //   },
-  //   filter(answer) {
-  //     return answer;
-  //   },
-  // },
-  // {
-  //   prefix: "⠋🟡 6 of 6)",
-  //   name: "emailAddress",
-  //   type: "input",
-  //   message: `${white}Enter the ${blue}email address${white}?`,
-  //   default: "callasteven@gmail.com",
-  //   validate(answer) {
-  //     return isEmail(answer);
-  //   },
-  // },
 ];
 
 const questionsUpdateEmployeeRole = [ // maps to Add Role
