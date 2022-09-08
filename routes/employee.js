@@ -26,7 +26,6 @@ employees
   });
 
 employees.put("/update-role", (req, res) => {
-  console.log("update role route = ", req.body);
   updateRole(req.body);
   res.end();
 });
