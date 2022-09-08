@@ -24,7 +24,7 @@ This app is a command-line interface (CLI) that allows a company to view and man
 
 ## Usage
 
-If you'd like to use NPM nodemon as/if you make changes to the code, please install nodemon as a development dependency using "npm install --save-dev nodemon" (see https://www.npmjs.com/package//nodemon).This CLI allows a user to view and manage the departments, roles and employees of a company.
+If you'd like to use NPM nodemon as/if you make changes to the code, please install nodemon as a development dependency using "npm install --save-dev nodemon" (see https://www.npmjs.com/package//nodemon). This CLI allows a user to view and manage the departments, roles and employees of a company.
 
 ## Features
 
@@ -54,7 +54,11 @@ This app can be enhanced by (a) using/adding dates such as created at, updated a
 
 ## Tests
 
-No tests are setup at this time.
+There are a limited number of tests setup for the helpers util.js file. To run tests install "jest": "^28.1.3" as a dev dependancy, then run "npm test".
+
+For More Information:
+1. [NPM Jest](https://www.npmjs.com/package/jest)
+2. [Jest Home Page](https://jestjs.io/)
 
 ## Contributing
 
