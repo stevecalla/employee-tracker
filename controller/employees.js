@@ -10,6 +10,8 @@ const addEmployee = async (req) => {
 }
 
 const updateManager = async (req) => {
+  console.log('aakaa = ', req, req.employee)
+
   let first_name = req.employee.split(' ')[0];
   let last_name = req.employee.split(' ')[1];
 
