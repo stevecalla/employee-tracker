@@ -12,12 +12,12 @@ const {
 
 } = require("./runInquirer");
 const { banner } = require("./banner");
-const { blue, white } = require("../../lib/util");
+const { blue, white } = require("../../helpers/util");
 const consoleTable = require('console.table');
 const axios = require('axios');
-const Departments = require('../../lib/Departments');
-const Roles = require('../../lib/Roles');
-const Employees = require('../../lib/Employees');
+const Departments = require('../lib/Departments');
+const Roles = require('../lib/Roles');
+const Employees = require('../lib/Employees');
 
 //ASK USER WHAT ACTION TO PERFORM
 getWhatToDo = async () => {

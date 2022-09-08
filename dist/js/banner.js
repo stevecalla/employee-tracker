@@ -1,4 +1,4 @@
-const { blue, white } = require('../../lib/util');
+const { blue, white } = require('../../helpers/util');
 
 const banner = `${white}${blue}
 oooooooooooo                              oooo                                            

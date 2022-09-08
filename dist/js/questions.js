@@ -1,9 +1,9 @@
-const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../lib/util");
-const axios = require('axios');
+const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../helpers/util");
+// const axios = require('axios');
 const inquirer = require("inquirer");
-const Departments = require('../../lib/Departments');
-const Roles = require('../../lib/Roles');
-const Employees = require('../../lib/Employees');
+const Departments = require('../../dist/lib/Departments');
+const Roles = require('../../dist/lib/Roles');
+const Employees = require('../../dist/lib/Employees');
 
 choicesStart = [
   new inquirer.Separator(`-- Employees --`),

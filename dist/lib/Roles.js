@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { blue } = require('../lib/util');
+const { blue } = require('../../helpers/util');
 
 class Roles {
   constructor( role, salary, roleDepartment ) {
