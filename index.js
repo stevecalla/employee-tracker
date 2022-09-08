@@ -1,7 +1,10 @@
-// const { getTeamDetails } = require("./dist/js/app");
+const { getWhatToDo } = require('./dist/js/app');
+const { banner } = require('./dist/js/banner');
 
-// let main = () => {
-//   getTeamDetails();
-// };
+let main = () => {
+  console.log(banner);
+  getWhatToDo();
+};
 
-// main();
+main();
+

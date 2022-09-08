@@ -1,9 +1,14 @@
-const { capitalizeFirstCharacter, lowerCase, isNumber, isEmail, isBlank, blue, white } = require("../../helpers/util");
-// const axios = require('axios');
+const {
+  capitalizeFirstCharacter,
+  isNumber,
+  isBlank,
+  blue,
+  white,
+} = require("../../helpers/util");
 const inquirer = require("inquirer");
-const Departments = require('../../dist/lib/Departments');
-const Roles = require('../../dist/lib/Roles');
-const Employees = require('../../dist/lib/Employees');
+const Departments = require("../../dist/lib/Departments");
+const Roles = require("../../dist/lib/Roles");
+const Employees = require("../../dist/lib/Employees");
 
 choicesStart = [
   new inquirer.Separator(`-- Employees --`),
@@ -18,40 +23,46 @@ choicesStart = [
   "Add Role", // see questionsAddRole
   "Delete Role",
   new inquirer.Separator(`-- Departments --`),
-  
+
   "View All Departments",
   "Add Department", // see questionsAddDepartment
-  "Delete Department", 
+  "Delete Department",
   new inquirer.Separator(`-- Reports --`),
 
   "View Employees by Manager",
   "View Employees by Department",
   "View Department by Salary",
   new inquirer.Separator(`-- Quit --`),
-  
+
   "Quit",
 ];
 
 choicesDepartments = async () => {
   let viewDepartmentsList = new Departments();
-  let deparmentsData = await viewDepartmentsList.fetchDepartmentsList('api/departments');
-  let departments = deparmentsData.data.map(element => element.Department);
+  let deparmentsData = await viewDepartmentsList.fetchDepartmentsList(
+    "api/departments"
+  );
+  let departments = deparmentsData.data.map((element) => element.Department);
   return departments;
-}
+};
 
 choicesRoles = async () => {
   let viewRolesList = new Roles();
-  let rolesData = await viewRolesList.fetchRolesList('api/roles');
-  let roles = rolesData.data.map(element => element.Title);
+  let rolesData = await viewRolesList.fetchRolesList("api/roles");
+  let roles = rolesData.data.map((element) => element.Title);
   return roles;
-}
+};
 
 choicesEmployees = async () => {
   let viewEmployeesList = new Employees();
-  let employeesData = await viewEmployeesList.fetchEmployeesList('api/employees');
-  let employees = employeesData.data.map(element => `${element.First_Name} ${element.Last_Name}`);
+  let employeesData = await viewEmployeesList.fetchEmployeesList(
+    "api/employees"
+  );
+  let employees = employeesData.data.map(
+    (element) => `${element.First_Name} ${element.Last_Name}`
+  );
   return employees;
-}
+};
 
 const questionsUserChoice = [
   {
@@ -65,7 +76,8 @@ const questionsUserChoice = [
   },
 ];
 
-const questionsAddDepartment = [ // maps to Add Department
+const questionsAddDepartment = [
+  // maps to Add Department
   {
     prefix: "⠋🟡 1 of 1)",
     type: "input",
@@ -82,45 +94,42 @@ const questionsAddDepartment = [ // maps to Add Department
   },
 ];
 
-const questionsAddRole = [ // maps to Add Role
-{
-  prefix: "⠋🟡 1 of 3)",
-  type: "input",
-  name: "role",
-  message: `${white}Enter the ${blue}role${white}?`,
-  choices: choicesRoles,
-  default: "New Role",
-  suffix: " 🟡",
-  filter(answer) {
-    return capitalizeFirstCharacter(answer);
-  }
-},
-{
-  prefix: "⠋🟡 2 of 3)",
-  type: "input",
-  name: "salary",
-  message: `${white}Enter the ${blue}salary${white} of the role (with no commas)?`,
-  default: "10000",
-  suffix: " 🟡",
-  validate(answer) {
-    return isNumber(answer);
+const questionsAddRole = [
+  // maps to Add Role
+  {
+    prefix: "⠋🟡 1 of 3)",
+    type: "input",
+    name: "role",
+    message: `${white}Enter the ${blue}role${white}?`,
+    choices: choicesRoles,
+    default: "New Role",
+    suffix: " 🟡",
+    filter(answer) {
+      return capitalizeFirstCharacter(answer);
+    },
   },
-  filter(answer) {
-    // answer = parseInt(answer).toLocaleString();
-    // console.log(answer, typeof(answer), answer.toLocaleString());
-    //convert to parseInt in the role class
-    return parseInt(answer);
+  {
+    prefix: "⠋🟡 2 of 3)",
+    type: "input",
+    name: "salary",
+    message: `${white}Enter the ${blue}salary${white} of the role (with no commas)?`,
+    default: "10000",
+    suffix: " 🟡",
+    validate(answer) {
+      return isNumber(answer);
+    },
+    filter(answer) {
+      return parseInt(answer);
+    },
   },
-},
-{
-  prefix: "⠋🟡 3 of 3)",
-  type: "rawlist",
-  name: "roleDepartment",
-  message: `${white}Enter the ${blue}department${white} of the role?`,
-  choices: choicesDepartments,
-  // default: "Manager",
-  suffix: " 🟡",
-},
+  {
+    prefix: "⠋🟡 3 of 3)",
+    type: "rawlist",
+    name: "roleDepartment",
+    message: `${white}Enter the ${blue}department${white} of the role?`,
+    choices: choicesDepartments,
+    suffix: " 🟡",
+  },
 ];
 
 const questionsAddEmployee = [
@@ -170,14 +179,14 @@ const questionsAddEmployee = [
   },
 ];
 
-const questionsUpdateEmployeeRole = [ // maps to Add Role
+const questionsUpdateEmployeeRole = [
+  // maps to Add Role
   {
     prefix: "⠋🟡 1 of 2)",
     type: "rawlist",
     name: "employee",
     message: `\u001b[0;1mSelect ${blue}employee${white} to update?`,
     choices: choicesEmployees,
-    // default: "Manager",
     suffix: " 🟡",
   },
   {
@@ -191,7 +200,8 @@ const questionsUpdateEmployeeRole = [ // maps to Add Role
   },
 ];
 
-const questionsUpdateEmployeeManager = [ // maps to Add Role
+const questionsUpdateEmployeeManager = [
+  // maps to Add Role
   {
     prefix: "⠋🟡 1 of 2)",
     type: "rawlist",
@@ -211,7 +221,8 @@ const questionsUpdateEmployeeManager = [ // maps to Add Role
   },
 ];
 
-const questionsDeleteRole = [ // maps to Delete Role
+const questionsDeleteRole = [
+  // maps to Delete Role
   {
     prefix: "⠋🟡 1 of 2)",
     type: "rawlist",
@@ -224,12 +235,14 @@ const questionsDeleteRole = [ // maps to Delete Role
     prefix: "⠋🟡 2 of 2)",
     type: "confirm",
     name: "confirm",
-    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.role}${white}?`,
+    message: (answers) =>
+      `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.role}${white}?`,
     suffix: " 🟡",
   },
 ];
 
-const questionsDeleteDepartment = [ // maps to Delete Role
+const questionsDeleteDepartment = [
+  // maps to Delete Role
   {
     prefix: "⠋🟡 1 of 2)",
     type: "rawlist",
@@ -242,12 +255,14 @@ const questionsDeleteDepartment = [ // maps to Delete Role
     prefix: "⠋🟡 2 of 2)",
     type: "confirm",
     name: "confirm",
-    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.department}${white}?`,
+    message: (answers) =>
+      `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.department}${white}?`,
     suffix: " 🟡",
   },
 ];
 
-const questionsDeleteEmployee = [ // maps to Delete Role
+const questionsDeleteEmployee = [
+  // maps to Delete Role
   {
     prefix: "⠋🟡 1 of 2)",
     type: "rawlist",
@@ -260,10 +275,11 @@ const questionsDeleteEmployee = [ // maps to Delete Role
     prefix: "⠋🟡 2 of 2)",
     type: "confirm",
     name: "confirm",
-    message: (answers) => `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.employee}${white}?`,
+    message: (answers) =>
+      `\u001b[0;1mConfirm you would like to ${blue}delete ${answers.employee}${white}?`,
     suffix: " 🟡",
   },
-]
+];
 
 module.exports = {
   questionsUserChoice,

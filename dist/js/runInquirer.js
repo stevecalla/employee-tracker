@@ -44,17 +44,17 @@ getUpdateEmployeeManager = () => {
 getDeleteEmployee = () => {
   const deleteEmployee = inquirer.prompt(questionsDeleteEmployee);
   return deleteEmployee;
-}
+};
 
 getDeleteRole = () => {
   const deleteRole = inquirer.prompt(questionsDeleteRole);
   return deleteRole;
-}
+};
 
 getDeleteDepartment = () => {
   const deleteDepartment = inquirer.prompt(questionsDeleteDepartment);
   return deleteDepartment;
-}
+};
 
 module.exports = {
   getUserChoice,
@@ -65,5 +65,5 @@ module.exports = {
   getUpdateEmployeeManager,
   getDeleteEmployee,
   getDeleteRole,
-  getDeleteDepartment
+  getDeleteDepartment,
 };

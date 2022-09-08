@@ -1,11 +1,11 @@
-const axios = require('axios');
-const { blue } = require('../../helpers/util');
+const axios = require("axios");
+const { blue } = require("../../helpers/util");
 
 class Roles {
-  constructor( role, salary, roleDepartment ) {
-    this.title = role,
-    this.salary = salary,
-    this.department = roleDepartment
+  constructor(role, salary, roleDepartment) {
+    (this.title = role),
+    (this.salary = salary),
+    (this.department = roleDepartment);
   }
 
   getRole() {
@@ -22,18 +22,17 @@ class Roles {
 
   //USED BY APP.JS TO RENDER ROLES TABLE
   fetchAllRoles(path, selection) {
-    axios.get(`http://localhost:3001/${path}`)
-    .then(function (response) {
-      // handle success
-      renderTableOutput(response.data, selection);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    .then(function () {
-      getWhatToDo();
-    });
+    axios
+      .get(`http://localhost:3001/${path}`)
+      .then(function (response) {
+        renderTableOutput(response.data, selection);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .then(function () {
+        getWhatToDo();
+      });
   }
 
   //USED BY QUESTIONS.JS TO RENDER LIST OF ROLES
@@ -50,13 +49,13 @@ class Roles {
 
   //DETERMINES IF ROLE EXISTS IN DATABASE
   async isCurrentRole(title) {
-    let roleExists = await this.fetchRoleId('api/roles', title, "employee");
+    let roleExists = await this.fetchRoleId("api/roles", title, "employee");
 
     if (roleExists) {
       return true;
     } else {
       return false;
-    };
+    }
   }
 
   //ADD NEW ROLE
@@ -70,27 +69,30 @@ class Roles {
       axios.post(`http://localhost:3001/${path}`, {
         role: title,
         salary: salary,
-        department_id: deptId
-      })
+        department_id: deptId,
+      });
     }
   }
 
   //DELETE ROLE
   async deleteRole(path, { role, confirm }) {
     if (confirm) {
-      axios.delete(`http://localhost:3001/${path}`, {
-        data: { role: role }
+      axios
+        .delete(`http://localhost:3001/${path}`, {
+          data: { role: role },
         })
         .catch(function (error) {
-          // console.log(error);
-        })
+          console.log(error);
+        });
     }
   }
 
   //RENDER MESSAGE TO CONFIRM ROLE ADDED
   renderAddRoleMessage({ title }, isCurrentRole) {
     if (isCurrentRole) {
-      console.log(`\n${blue}Did not add ${title}. This role already exists in the database.`);
+      console.log(
+        `\n${blue}Did not add ${title}. This role already exists in the database.`
+      );
     } else {
       console.log(`\n${blue}Added ${title} to the database.`);
     }
@@ -100,7 +102,6 @@ class Roles {
   renderDeleteRoleMessage(role) {
     console.log(`\n${blue}Deleted ${role} role`);
   }
-  
 }
 
 module.exports = Roles;

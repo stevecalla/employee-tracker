@@ -48,6 +48,3 @@ DESCRIBE employees;
 SELECT * FROM departments;
 SELECT * FROM roles;
 SELECT * FROM employees;
-
--- use employee_manager_db;
--- source ../../db/schema.sql;
