@@ -47,7 +47,7 @@ This app can be enhanced by (a) using/adding dates such as created at, updated a
 <img alt="" src="./dist/images/static-image.png" width="100%" height="425"/>
 
 ## App Preview - Video Preview
-[Link to Video](https://www.youtube.com/watch?v=_hr9SKZC5Rc&feature=youtu.be)
+[Link to Video](https://youtu.be/mTXi192qhBY)
 
 <img alt="" src="./dist/images/app-video.gif"/>
 
