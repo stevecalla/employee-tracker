@@ -6,9 +6,7 @@ const getDepartments = async () => {
 };
 
 const addDepartment = async (departmentName) => {
-  db.query(
-    `INSERT INTO departments(name) VALUES (?)`, [departmentName]
-  );
+  db.query(`INSERT INTO departments(name) VALUES (?)`, [departmentName]);
 };
 
 const deleteDepartment = (department) => {
@@ -17,7 +15,8 @@ const deleteDepartment = (department) => {
 
 const getDepartmentId = async (department) => {
   let result = await db.awaitQuery(
-    `SELECT id FROM departments WHERE name = ?`, [department]
+    `SELECT id FROM departments WHERE name = ?`,
+    [department]
   );
   result.length !== 0 ? (result = result[0].id) : (result = 0);
   return result;

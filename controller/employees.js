@@ -7,7 +7,8 @@ const getEmployees = async () => {
 
 const addEmployee = async (req) => {
   db.query(
-    `INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [req.first_name, req.last_name, req.role_id, req.manager_id]
+    `INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
+    [req.first_name, req.last_name, req.role_id, req.manager_id]
   );
 };
 
@@ -15,9 +16,10 @@ const deleteEmployee = (req) => {
   let first_name = req.employee.split(" ")[0];
   let last_name = req.employee.split(" ")[1];
 
-  db.query(
-    `DELETE FROM employees WHERE first_name = ? and last_name = ?`, [first_name, last_name]
-  );
+  db.query(`DELETE FROM employees WHERE first_name = ? and last_name = ?`, [
+    first_name,
+    last_name,
+  ]);
 };
 
 const getEmployeeId = async (req) => {
@@ -25,7 +27,8 @@ const getEmployeeId = async (req) => {
   let last_name = req.manager.split(" ")[1];
 
   let result = await db.awaitQuery(
-    `SELECT * FROM employees WHERE first_name = ? AND last_name = ?`, [first_name, last_name]
+    `SELECT * FROM employees WHERE first_name = ? AND last_name = ?`,
+    [first_name, last_name]
   );
 
   result.length !== 0 ? (result = result) : (result = 0);
@@ -33,9 +36,10 @@ const getEmployeeId = async (req) => {
 };
 
 const updateRole = async (req) => {
-  db.query(
-    `UPDATE employees SET role_id = ? WHERE id = ?`, [req.role_id, req.id]
-  );
+  db.query(`UPDATE employees SET role_id = ? WHERE id = ?`, [
+    req.role_id,
+    req.id,
+  ]);
 };
 
 const updateManager = async (req) => {
@@ -43,7 +47,8 @@ const updateManager = async (req) => {
   let last_name = req.employee.split(" ")[1];
 
   db.query(
-    `UPDATE employees SET manager_id = ?  WHERE first_name = ? and last_name = ?`, [req.manager_id, first_name, last_name]
+    `UPDATE employees SET manager_id = ?  WHERE first_name = ? and last_name = ?`,
+    [req.manager_id, first_name, last_name]
   );
 };
 
