@@ -5,22 +5,22 @@ const getRoles = async () => {
   return result;
 };
 
-const getRoleId = async (title) => {
-  let result = await db.awaitQuery(
-    `SELECT id FROM roles WHERE title = "${title}"`
-  );
-  result.length !== 0 ? (result = result[0].id) : (result = 0);
-  return result;
-};
-
 const addRole = async (req) => {
   db.query(
-    `INSERT INTO roles(title, salary, department_id) VALUES ("${req.role}", "${req.salary}", "${req.department_id}")`
+    `INSERT INTO roles(title, salary, department_id) VALUES (?, ?, ?)`, [req.role, req.salary, req.department_id]
   );
 };
 
 const deleteRole = (role) => {
-  db.query(`DELETE FROM roles WHERE title = "${role}"`);
+  db.query(`DELETE FROM roles WHERE title = ?`, [role]);
+};
+
+const getRoleId = async (title) => {
+  let result = await db.awaitQuery(
+    `SELECT id FROM roles WHERE title = ?`, [title]
+  );
+  result.length !== 0 ? (result = result[0].id) : (result = 0);
+  return result;
 };
 
 const roleTableSQL = `
