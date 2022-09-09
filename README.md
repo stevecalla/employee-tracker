@@ -49,7 +49,7 @@ This app can be enhanced by (a) using/adding dates such as created at, updated a
 ## App Preview - Video Preview
 [Link to Video](https://youtu.be/mTXi192qhBY)
 
-<img alt="" src="./dist/images/app-video.gif"/>
+<img alt="" src="./dist/images/app-video.gif" width="75%" height="200"/>
 
 ## Tests
 
