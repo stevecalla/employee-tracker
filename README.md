@@ -17,7 +17,6 @@
 ```
 This app is a command-line interface (CLI) that allows a company to view and manage the departments, roles and employees. At the command line the user can generate reports showing all deparments, roles, employees, employees by role, employees by manager, salary by department as well as add, delete departments, roles, employees and update an employees role or manager. 
 ```
-
 ## Installation
 
 (1) Fork the repo, (2) Clone the forked repo locally, (3) Run "npm install" (to install the dependencies), (4) Run "node server.js" to start the server (from the root directory), (6) Run "node.index.js" to start the employee tracker CLI.
@@ -48,7 +47,7 @@ This app can be enhanced by (a) using/adding dates such as created at, updated a
 <img alt="" src="./dist/images/static-image.png" width="100%" height="425"/>
 
 ## App Preview - Video Preview
-[Link to Video](https://www.youtube.com/watch?v=_hr9SKZC5Rc&feature=youtu.be)
+[Link to Video](https://youtu.be/mTXi192qhBY)
 
 <img alt="" src="./dist/images/app-video.gif"/>
 
